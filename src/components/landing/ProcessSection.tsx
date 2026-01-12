@@ -1,11 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { Phone, Search, FileText, ClipboardCheck, Wrench, Shield, Check, Zap, Home, Sun, Leaf } from 'lucide-react';
 import { SectionFloatingIcons } from './SectionFloatingIcons';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
   {
@@ -67,69 +63,79 @@ export function ProcessSection() {
 
     if (!section || !pinned || !timeline) return;
 
-    // Only apply pinning on desktop
-    const mm = gsap.matchMedia();
+    // Dynamic import to avoid SSR issues
+    const initGSAP = async () => {
+      const { gsap } = await import('gsap');
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+      
+      gsap.registerPlugin(ScrollTrigger);
 
-    mm.add('(min-width: 1024px)', () => {
-      // Pin the left side while scrolling through the timeline
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top+=100',
-        end: () => `+=${timeline.offsetHeight - pinned.offsetHeight + 100}`,
-        pin: pinned,
-        pinSpacing: false,
-      });
+      // Only apply pinning on desktop
+      const mm = gsap.matchMedia();
 
-      // Animate each step
-      const stepElements = timeline.querySelectorAll('.process-step');
-      stepElements.forEach((step, index) => {
-        gsap.fromTo(
-          step,
-          { opacity: 0, x: 50, rotateY: 15 },
-          {
-            opacity: 1,
-            x: 0,
-            rotateY: 0,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: step,
-              start: 'top 80%',
-              end: 'top 50%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
+      mm.add('(min-width: 1024px)', () => {
+        // Pin the left side while scrolling through the timeline
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top top+=100',
+          end: () => `+=${timeline.offsetHeight - pinned.offsetHeight + 100}`,
+          pin: pinned,
+          pinSpacing: false,
+        });
 
-        // Animate the connecting line
-        const line = step.querySelector('.connecting-line-fill');
-        if (line) {
+        // Animate each step
+        const stepElements = timeline.querySelectorAll('.process-step');
+        stepElements.forEach((step) => {
           gsap.fromTo(
-            line,
-            { scaleY: 0 },
+            step,
+            { opacity: 0, x: 50, rotateY: 15 },
             {
-              scaleY: 1,
-              duration: 0.6,
-              ease: 'power2.out',
+              opacity: 1,
+              x: 0,
+              rotateY: 0,
+              duration: 0.8,
+              ease: 'power3.out',
               scrollTrigger: {
                 trigger: step,
-                start: 'top 60%',
-                end: 'bottom 60%',
+                start: 'top 80%',
+                end: 'top 50%',
                 toggleActions: 'play none none reverse',
               },
             }
           );
-        }
+
+          // Animate the connecting line
+          const line = step.querySelector('.connecting-line-fill');
+          if (line) {
+            gsap.fromTo(
+              line,
+              { scaleY: 0 },
+              {
+                scaleY: 1,
+                duration: 0.6,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: step,
+                  start: 'top 60%',
+                  end: 'bottom 60%',
+                  toggleActions: 'play none none reverse',
+                },
+              }
+            );
+          }
+        });
+
+        return () => {
+          ScrollTrigger.getAll().forEach((t) => t.kill());
+        };
       });
 
       return () => {
-        ScrollTrigger.getAll().forEach((t) => t.kill());
+        mm.revert();
       };
-    });
-
-    return () => {
-      mm.revert();
     };
+
+    initGSAP();
   }, []);
 
   return (

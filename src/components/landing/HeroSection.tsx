@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { Phone, Star, Shield, ArrowDown } from 'lucide-react';
+import { Phone, Star, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AnimatedGradient } from './AnimatedGradient';
 import { FloatingElements } from './FloatingElements';
@@ -25,84 +24,91 @@ export function HeroSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    // Dynamic import to avoid SSR/module loading issues
+    const initAnimations = async () => {
+      const { gsap } = await import('gsap');
+      
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      // Animate stars one by one
-      if (starsRef.current) {
-        const stars = starsRef.current.querySelectorAll('.hero-star');
-        tl.fromTo(
-          stars,
-          { scale: 0, rotation: -180, opacity: 0 },
-          { scale: 1, rotation: 0, opacity: 1, duration: 0.4, stagger: 0.1 },
-          0.2
-        );
-      }
+        // Animate stars one by one
+        if (starsRef.current) {
+          const stars = starsRef.current.querySelectorAll('.hero-star');
+          tl.fromTo(
+            stars,
+            { scale: 0, rotation: -180, opacity: 0 },
+            { scale: 1, rotation: 0, opacity: 1, duration: 0.4, stagger: 0.1 },
+            0.2
+          );
+        }
 
-      // Badge slide in with tilt
-      if (badgeRef.current) {
-        tl.fromTo(
-          badgeRef.current,
-          { y: 30, opacity: 0, rotateX: 45 },
-          { y: 0, opacity: 1, rotateX: 0, duration: 0.8 },
-          0.1
-        );
-      }
+        // Badge slide in with tilt
+        if (badgeRef.current) {
+          tl.fromTo(
+            badgeRef.current,
+            { y: 30, opacity: 0, rotateX: 45 },
+            { y: 0, opacity: 1, rotateX: 0, duration: 0.8 },
+            0.1
+          );
+        }
 
-      // Title lines with stagger and tilt
-      if (titleRef.current) {
-        const lines = titleRef.current.querySelectorAll('.title-line');
-        tl.fromTo(
-          lines,
-          { y: 80, opacity: 0, rotateX: 30, skewX: -5 },
-          { y: 0, opacity: 1, rotateX: 0, skewX: 0, duration: 1, stagger: 0.15 },
-          0.3
-        );
-      }
+        // Title lines with stagger and tilt
+        if (titleRef.current) {
+          const lines = titleRef.current.querySelectorAll('.title-line');
+          tl.fromTo(
+            lines,
+            { y: 80, opacity: 0, rotateX: 30, skewX: -5 },
+            { y: 0, opacity: 1, rotateX: 0, skewX: 0, duration: 1, stagger: 0.15 },
+            0.3
+          );
+        }
 
-      // Subtitle
-      if (subtitleRef.current) {
-        tl.fromTo(
-          subtitleRef.current,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8 },
-          0.7
-        );
-      }
+        // Subtitle
+        if (subtitleRef.current) {
+          tl.fromTo(
+            subtitleRef.current,
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8 },
+            0.7
+          );
+        }
 
-      // Service pills stagger
-      if (pillsRef.current) {
-        const pills = pillsRef.current.querySelectorAll('.service-pill');
-        tl.fromTo(
-          pills,
-          { y: 30, opacity: 0, scale: 0.8 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.5, stagger: 0.08 },
-          0.9
-        );
-      }
+        // Service pills stagger
+        if (pillsRef.current) {
+          const pills = pillsRef.current.querySelectorAll('.service-pill');
+          tl.fromTo(
+            pills,
+            { y: 30, opacity: 0, scale: 0.8 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.5, stagger: 0.08 },
+            0.9
+          );
+        }
 
-      // CTA button with bounce
-      if (ctaRef.current) {
-        tl.fromTo(
-          ctaRef.current,
-          { y: 50, opacity: 0, scale: 0.9 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.5)' },
-          1.1
-        );
-      }
+        // CTA button with bounce
+        if (ctaRef.current) {
+          tl.fromTo(
+            ctaRef.current,
+            { y: 50, opacity: 0, scale: 0.9 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.5)' },
+            1.1
+          );
+        }
 
-      // Scroll indicator
-      if (scrollRef.current) {
-        tl.fromTo(
-          scrollRef.current,
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6 },
-          1.4
-        );
-      }
-    }, heroRef);
+        // Scroll indicator
+        if (scrollRef.current) {
+          tl.fromTo(
+            scrollRef.current,
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6 },
+            1.4
+          );
+        }
+      }, heroRef);
 
-    return () => ctx.revert();
+      return () => ctx.revert();
+    };
+
+    initAnimations();
   }, []);
 
   return (
