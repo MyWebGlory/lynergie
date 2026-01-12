@@ -1,68 +1,58 @@
 import { useEffect, useRef, useState } from 'react';
-import { Phone, Search, FileText, ClipboardCheck, Wrench, Shield, Check, Zap, Home, Sun, Leaf, Wind, Battery, Sparkles } from 'lucide-react';
+import { Phone, Search, FileText, ClipboardCheck, Wrench, Shield, Check, Sun, Leaf } from 'lucide-react';
 
 const steps = [
   {
     number: '01',
     title: 'Prise de contact',
-    description: 'Appelez-nous ou remplissez notre formulaire. Nous vous recontactons sous 2 heures.',
+    description: 'Appelez-nous ou remplissez notre formulaire.',
     Icon: Phone,
   },
   {
     number: '02',
     title: 'Visite technique',
-    description: 'Un expert se déplace gratuitement chez vous pour étudier votre projet.',
+    description: 'Un expert se déplace gratuitement chez vous.',
     Icon: Search,
   },
   {
     number: '03',
     title: 'Étude personnalisée',
-    description: 'Nous concevons une solution sur mesure adaptée à vos besoins et votre budget.',
+    description: 'Une solution sur mesure pour vos besoins.',
     Icon: FileText,
   },
   {
     number: '04',
     title: 'Accompagnement administratif',
-    description: 'Nous gérons toutes les démarches : aides, subventions, autorisations.',
+    description: 'Nous gérons aides et autorisations.',
     Icon: ClipboardCheck,
   },
   {
     number: '05',
     title: 'Installation',
-    description: 'Nos équipes certifiées RGE réalisent l\'installation dans les règles de l\'art.',
+    description: 'Équipes certifiées RGE à votre service.',
     Icon: Wrench,
   },
   {
     number: '06',
     title: 'Suivi et garantie',
-    description: 'Maintenance, garanties étendues et support technique à vie.',
+    description: 'Support technique à vie.',
     Icon: Shield,
   },
 ];
 
 const floatingIcons = [
-  { Icon: Sun, top: '5%', left: '3%', delay: 0, size: 32 },
-  { Icon: Home, top: '12%', right: '5%', delay: 1, size: 28 },
-  { Icon: Zap, top: '25%', left: '8%', delay: 2, size: 24 },
-  { Icon: Leaf, top: '35%', right: '3%', delay: 3, size: 30 },
-  { Icon: Wind, top: '50%', left: '2%', delay: 4, size: 26 },
-  { Icon: Battery, top: '60%', right: '6%', delay: 5, size: 28 },
-  { Icon: Sparkles, top: '75%', left: '5%', delay: 6, size: 22 },
-  { Icon: Sun, top: '85%', right: '4%', delay: 7, size: 26 },
+  { Icon: Sun, top: '8%', left: '4%', delay: 0, size: 24 },
+  { Icon: Leaf, top: '15%', right: '5%', delay: 2, size: 20 },
+  { Icon: Sun, bottom: '20%', right: '4%', delay: 4, size: 22 },
 ];
 
 export function ProcessSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const stepsContainerRef = useRef<HTMLDivElement>(null);
-  const [activeStep, setActiveStep] = useState(0);
+  const [visibleSteps, setVisibleSteps] = useState<number[]>([]);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const container = containerRef.current;
-    const stepsContainer = stepsContainerRef.current;
-
-    if (!section || !container || !stepsContainer) return;
+    if (!section) return;
 
     let scrollTriggerInstance: any = null;
 
@@ -76,38 +66,35 @@ export function ProcessSection() {
         
         gsap.registerPlugin(ScrollTrigger);
 
-        // Kill any existing triggers
         ScrollTrigger.getAll().forEach((t: any) => {
           if (t.trigger === section) t.kill();
         });
 
-        // SCROLL PINNING - Pin the entire section
         scrollTriggerInstance = ScrollTrigger.create({
           trigger: section,
           start: 'top top',
-          end: () => `+=${steps.length * 100}%`,
+          end: () => `+=${steps.length * 80}%`,
           pin: true,
           pinSpacing: true,
-          scrub: 1,
+          scrub: 0.5,
           onUpdate: (self: any) => {
             const progress = self.progress;
-            const stepIndex = Math.min(
-              Math.floor(progress * steps.length),
-              steps.length - 1
-            );
-            setActiveStep(stepIndex);
+            const currentStep = Math.floor(progress * steps.length);
+            const newVisible = [];
+            for (let i = 0; i <= Math.min(currentStep, steps.length - 1); i++) {
+              newVisible.push(i);
+            }
+            setVisibleSteps(newVisible);
           },
         });
 
-        // Force a refresh
         ScrollTrigger.refresh();
-
       } catch (error) {
         console.error('Failed to load GSAP:', error);
+        setVisibleSteps([0, 1, 2, 3, 4, 5]);
       }
     };
 
-    // Small delay to ensure DOM is ready
     const timeout = setTimeout(initGSAP, 100);
 
     return () => {
@@ -122,71 +109,61 @@ export function ProcessSection() {
     <section 
       ref={sectionRef} 
       id="process" 
-      className="relative min-h-screen overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.3) 50%, hsl(var(--background)) 100%)' }}
+      className="relative min-h-screen overflow-hidden py-16"
+      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.2) 50%, hsl(var(--background)) 100%)' }}
     >
-      {/* Enhanced floating background icons */}
+      {/* Minimal floating icons */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {floatingIcons.map(({ Icon, top, left, right, delay, size }, index) => (
+        {floatingIcons.map(({ Icon, top, left, right, bottom, delay, size }, index) => (
           <div
             key={index}
-            className="absolute animate-float"
-            style={{ 
-              top, 
-              left, 
-              right,
-              animationDelay: `${delay}s`,
-              animationDuration: `${12 + index * 2}s`
-            }}
+            className="absolute animate-float opacity-20"
+            style={{ top, left, right, bottom, animationDelay: `${delay}s`, animationDuration: `${14 + index * 3}s` }}
           >
             <div 
-              className="rounded-2xl backdrop-blur-sm flex items-center justify-center"
+              className="rounded-xl backdrop-blur-sm flex items-center justify-center"
               style={{
-                width: size * 2,
-                height: size * 2,
+                width: size * 1.8,
+                height: size * 1.8,
                 background: index % 2 === 0 
                   ? 'linear-gradient(135deg, hsl(var(--primary)/0.15), hsl(var(--primary)/0.05))' 
                   : 'linear-gradient(135deg, hsl(var(--accent)/0.15), hsl(var(--accent)/0.05))',
-                border: `1px solid ${index % 2 === 0 ? 'hsl(var(--primary)/0.2)' : 'hsl(var(--accent)/0.2)'}`,
               }}
             >
-              <Icon 
-                style={{ width: size, height: size }}
-                className={index % 2 === 0 ? 'text-primary/40' : 'text-accent/40'} 
-              />
+              <Icon style={{ width: size, height: size }} className={index % 2 === 0 ? 'text-primary/50' : 'text-accent/50'} />
             </div>
           </div>
         ))}
       </div>
 
-      {/* Large gradient orbs */}
+      {/* Gradient orbs */}
       <div className="absolute inset-0 pointer-events-none">
         <div 
-          className="absolute top-1/4 left-0 w-[600px] h-[600px] rounded-full blur-[120px] animate-pulse"
-          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.08) 0%, transparent 70%)' }}
+          className="absolute top-1/4 left-0 w-[400px] h-[400px] rounded-full blur-[100px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.06) 0%, transparent 70%)' }}
         />
         <div 
-          className="absolute bottom-1/4 right-0 w-[500px] h-[500px] rounded-full blur-[100px] animate-pulse"
-          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.08) 0%, transparent 70%)', animationDelay: '1s' }}
+          className="absolute bottom-1/4 right-0 w-[350px] h-[350px] rounded-full blur-[80px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.06) 0%, transparent 70%)' }}
         />
       </div>
 
-      <div ref={containerRef} className="relative z-10 container mx-auto px-4 h-screen flex items-center">
-        <div className="grid lg:grid-cols-2 gap-16 items-center w-full">
-          {/* Left: Header */}
-          <div className="space-y-6">
+      <div className="relative z-10 container mx-auto px-4 h-screen flex items-center">
+        <div className="grid lg:grid-cols-5 gap-8 items-center w-full">
+          {/* Left: Header - 2 columns */}
+          <div className="lg:col-span-2 space-y-4">
             <span 
-              className="inline-block px-5 py-2 rounded-full text-sm font-bold tracking-wide"
+              className="inline-block px-4 py-1.5 rounded-full text-sm font-bold"
               style={{ 
-                background: 'linear-gradient(135deg, hsl(var(--primary)/0.2), hsl(var(--primary)/0.1))',
-                border: '1px solid hsl(var(--primary)/0.3)',
+                background: 'linear-gradient(135deg, hsl(var(--primary)/0.15), hsl(var(--primary)/0.08))',
+                border: '1px solid hsl(var(--primary)/0.2)',
                 color: 'hsl(var(--primary))'
               }}
             >
               Notre Processus
             </span>
             
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground leading-tight">
+            <h2 className="text-3xl md:text-4xl font-black text-foreground leading-tight">
               Un accompagnement{' '}
               <span 
                 className="inline-block"
@@ -201,189 +178,128 @@ export function ProcessSection() {
               </span>
             </h2>
             
-            <p className="text-xl text-muted-foreground max-w-lg">
-              De votre premier appel à la mise en service, nous gérons tout. 
-              Concentrez-vous sur les économies, on s'occupe du reste.
+            <p className="text-muted-foreground">
+              De votre premier appel à la mise en service, nous gérons tout.
             </p>
 
-            {/* Progress indicator */}
-            <div className="flex items-center gap-3 pt-4">
-              <span className="text-sm text-muted-foreground">Progression</span>
-              <div className="flex-1 h-2 rounded-full bg-muted max-w-[200px] overflow-hidden">
-                <div 
-                  className="h-full rounded-full transition-all duration-500 ease-out"
-                  style={{ 
-                    width: `${((activeStep + 1) / steps.length) * 100}%`,
-                    background: 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)))'
-                  }}
-                />
-              </div>
-              <span className="text-sm font-bold text-primary">
-                {activeStep + 1}/{steps.length}
-              </span>
-            </div>
-
             {/* Quick stats */}
-            <div className="grid grid-cols-2 gap-4 pt-4">
+            <div className="flex gap-4 pt-2">
               <div 
-                className="p-5 rounded-2xl backdrop-blur-md"
+                className="px-4 py-3 rounded-xl backdrop-blur-md"
                 style={{
                   background: 'linear-gradient(135deg, hsl(var(--card)/0.8), hsl(var(--card)/0.4))',
                   border: '1px solid hsl(var(--border)/0.5)'
                 }}
               >
-                <div 
-                  className="text-3xl font-black mb-1"
-                  style={{ 
-                    background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)/0.7))',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text'
-                  }}
-                >
-                  48h
-                </div>
-                <div className="text-sm text-muted-foreground">Délai d'étude</div>
+                <div className="text-xl font-black text-primary">48h</div>
+                <div className="text-xs text-muted-foreground">Délai d'étude</div>
               </div>
               <div 
-                className="p-5 rounded-2xl backdrop-blur-md"
+                className="px-4 py-3 rounded-xl backdrop-blur-md"
                 style={{
                   background: 'linear-gradient(135deg, hsl(var(--card)/0.8), hsl(var(--card)/0.4))',
                   border: '1px solid hsl(var(--border)/0.5)'
                 }}
               >
-                <div 
-                  className="text-3xl font-black mb-1"
-                  style={{ 
-                    background: 'linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent)/0.7))',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text'
-                  }}
-                >
-                  100%
-                </div>
-                <div className="text-sm text-muted-foreground">Aides gérées</div>
+                <div className="text-xl font-black text-accent">100%</div>
+                <div className="text-xs text-muted-foreground">Aides gérées</div>
               </div>
             </div>
           </div>
 
-          {/* Right: Animated Steps */}
-          <div ref={stepsContainerRef} className="relative h-[500px] flex items-center justify-center">
-            {steps.map((step, index) => {
-              const isActive = index === activeStep;
-              const isPast = index < activeStep;
-              const isFuture = index > activeStep;
+          {/* Right: Steps Timeline - 3 columns */}
+          <div className="lg:col-span-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {steps.map((step, index) => {
+                const isVisible = visibleSteps.includes(index);
+                const isLatest = visibleSteps.length > 0 && index === visibleSteps[visibleSteps.length - 1];
 
-              return (
-                <div
-                  key={step.number}
-                  className="absolute w-full max-w-md transition-all duration-700 ease-out"
-                  style={{
-                    opacity: isActive ? 1 : isPast ? 0 : 0.3,
-                    transform: isActive 
-                      ? 'translateY(0) scale(1) rotateX(0deg)' 
-                      : isPast 
-                        ? 'translateY(-100px) scale(0.8) rotateX(-20deg)' 
-                        : 'translateY(100px) scale(0.9) rotateX(20deg)',
-                    zIndex: isActive ? 10 : 1,
-                    pointerEvents: isActive ? 'auto' : 'none',
-                  }}
-                >
-                  <div 
-                    className="p-8 rounded-3xl backdrop-blur-xl"
-                    style={{
-                      background: 'linear-gradient(135deg, hsl(var(--card)/0.95), hsl(var(--card)/0.7))',
-                      border: '1px solid hsl(var(--primary)/0.3)',
-                      boxShadow: isActive 
-                        ? '0 25px 80px -20px hsl(var(--primary)/0.4), 0 10px 30px -10px hsl(var(--background)/0.5)' 
-                        : 'none',
-                    }}
+                return (
+                  <div
+                    key={step.number}
+                    className="relative"
                   >
-                    <div className="flex items-start gap-5">
-                      {/* Icon */}
+                    {/* Connecting line to next step */}
+                    {index < steps.length - 1 && index !== 2 && (
                       <div 
-                        className="relative shrink-0 w-20 h-20 rounded-2xl flex items-center justify-center transition-transform duration-500"
+                        className="absolute top-1/2 -right-3 w-6 h-0.5 transition-all duration-500"
                         style={{
-                          background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)/0.8))',
-                          boxShadow: '0 10px 40px -10px hsl(var(--primary)/0.5)',
-                          transform: isActive ? 'scale(1) rotate(0deg)' : 'scale(0.8) rotate(-10deg)',
+                          background: isVisible && visibleSteps.includes(index + 1) 
+                            ? 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)))' 
+                            : 'hsl(var(--border))',
+                          opacity: isVisible ? 1 : 0.3
                         }}
-                      >
-                        <step.Icon className="w-10 h-10 text-primary-foreground" />
-                        
-                        {/* Step number badge */}
+                      />
+                    )}
+
+                    <div 
+                      className="p-4 rounded-2xl transition-all duration-500"
+                      style={{
+                        opacity: isVisible ? 1 : 0.3,
+                        transform: isVisible ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(10px)',
+                        background: isLatest 
+                          ? 'linear-gradient(135deg, hsl(var(--card)), hsl(var(--card)/0.8))' 
+                          : 'hsl(var(--card)/0.5)',
+                        border: isLatest 
+                          ? '1px solid hsl(var(--primary)/0.3)' 
+                          : '1px solid hsl(var(--border)/0.3)',
+                        boxShadow: isLatest 
+                          ? '0 10px 40px -15px hsl(var(--primary)/0.3)' 
+                          : 'none',
+                      }}
+                    >
+                      <div className="flex items-start gap-3">
+                        {/* Icon */}
                         <div 
-                          className="absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-xs font-black"
+                          className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500"
                           style={{
-                            background: 'linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent)/0.8))',
-                            color: 'hsl(var(--accent-foreground))',
-                            boxShadow: '0 4px 15px -5px hsl(var(--accent)/0.5)'
+                            background: isVisible 
+                              ? 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)/0.8))' 
+                              : 'hsl(var(--muted))',
                           }}
                         >
-                          {step.number}
+                          <step.Icon className="w-5 h-5 text-primary-foreground" />
                         </div>
-                      </div>
 
-                      {/* Content */}
-                      <div className="flex-1">
-                        <h3 
-                          className="text-2xl font-bold text-foreground mb-3 transition-all duration-500"
-                          style={{
-                            transform: isActive ? 'translateX(0)' : 'translateX(20px)',
-                            opacity: isActive ? 1 : 0.5
-                          }}
-                        >
-                          {step.title}
-                        </h3>
-                        <p 
-                          className="text-muted-foreground leading-relaxed transition-all duration-500"
-                          style={{
-                            transform: isActive ? 'translateX(0)' : 'translateX(30px)',
-                            opacity: isActive ? 1 : 0.3
-                          }}
-                        >
-                          {step.description}
-                        </p>
-
-                        {/* Completion indicator */}
-                        <div 
-                          className="mt-4 flex items-center gap-2 transition-all duration-500"
-                          style={{
-                            opacity: isActive ? 1 : 0,
-                            transform: isActive ? 'translateY(0)' : 'translateY(10px)'
-                          }}
-                        >
-                          <div 
-                            className="w-6 h-6 rounded-full flex items-center justify-center"
-                            style={{ background: 'hsl(var(--accent))' }}
-                          >
-                            <Check className="w-4 h-4 text-accent-foreground" />
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-mono text-primary font-bold">{step.number}</span>
+                            {isVisible && (
+                              <div 
+                                className="w-4 h-4 rounded-full flex items-center justify-center"
+                                style={{ background: 'hsl(var(--accent))' }}
+                              >
+                                <Check className="w-2.5 h-2.5 text-accent-foreground" />
+                              </div>
+                            )}
                           </div>
-                          <span className="text-sm text-accent font-medium">Étape en cours</span>
+                          <h3 className="text-sm font-bold text-foreground mb-1 truncate">
+                            {step.title}
+                          </h3>
+                          <p className="text-xs text-muted-foreground line-clamp-2">
+                            {step.description}
+                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
 
-            {/* Step indicators */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center gap-3">
+            {/* Vertical connecting lines for mobile/between rows */}
+            <div 
+              className="hidden md:flex justify-center mt-3 gap-1"
+            >
               {steps.map((_, index) => (
                 <div
                   key={index}
-                  className="transition-all duration-300"
+                  className="w-2 h-2 rounded-full transition-all duration-300"
                   style={{
-                    width: index === activeStep ? 32 : 12,
-                    height: 12,
-                    borderRadius: 6,
-                    background: index === activeStep 
-                      ? 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)))' 
-                      : index < activeStep 
-                        ? 'hsl(var(--primary)/0.5)' 
-                        : 'hsl(var(--muted))',
+                    background: visibleSteps.includes(index) 
+                      ? 'hsl(var(--primary))' 
+                      : 'hsl(var(--muted))',
                   }}
                 />
               ))}
@@ -393,14 +309,14 @@ export function ProcessSection() {
       </div>
 
       {/* Scroll hint */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-bounce opacity-60">
         <span className="text-xs text-muted-foreground uppercase tracking-wider">Scrollez</span>
         <div 
-          className="w-6 h-10 rounded-full border-2 flex items-start justify-center p-1"
-          style={{ borderColor: 'hsl(var(--primary)/0.5)' }}
+          className="w-5 h-8 rounded-full border flex items-start justify-center p-1"
+          style={{ borderColor: 'hsl(var(--primary)/0.4)' }}
         >
           <div 
-            className="w-1.5 h-3 rounded-full animate-pulse"
+            className="w-1 h-2 rounded-full"
             style={{ background: 'hsl(var(--primary))' }}
           />
         </div>

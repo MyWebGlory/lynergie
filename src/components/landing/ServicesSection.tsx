@@ -52,13 +52,8 @@ const services = [
 ];
 
 const floatingIcons = [
-  { Icon: Sun, position: 'top-[5%] left-[3%]', delay: '0s', color: 'primary' as const, size: 'lg' as const },
-  { Icon: Leaf, position: 'top-[12%] right-[5%]', delay: '1s', color: 'accent' as const, size: 'md' as const },
-  { Icon: Zap, position: 'top-[35%] left-[2%]', delay: '2s', color: 'primary' as const, size: 'md' as const },
-  { Icon: Home, position: 'top-[50%] right-[3%]', delay: '1.5s', color: 'accent' as const, size: 'lg' as const },
-  { Icon: Wind, position: 'bottom-[35%] left-[4%]', delay: '3s', color: 'accent' as const, size: 'md' as const },
-  { Icon: Car, position: 'bottom-[20%] right-[6%]', delay: '2.5s', color: 'primary' as const, size: 'lg' as const },
-  { Icon: Leaf, position: 'bottom-[8%] left-[8%]', delay: '4s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Sun, position: 'top-[8%] left-[4%]', delay: '0s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Leaf, position: 'bottom-[15%] right-[5%]', delay: '2s', color: 'accent' as const, size: 'md' as const },
 ];
 
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
@@ -143,28 +138,24 @@ export function ServicesSection() {
     <section 
       ref={sectionRef} 
       id="services" 
-      className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.2) 50%, hsl(var(--background)) 100%)' }}
+      className="relative py-16 md:py-20 overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.15) 50%, hsl(var(--background)) 100%)' }}
     >
       {/* Floating icons */}
-      <SectionFloatingIcons icons={floatingIcons} opacity={0.5} />
+      <SectionFloatingIcons icons={floatingIcons} opacity={0.25} />
 
-      {/* Enhanced gradient orbs */}
+      {/* Subtle gradient orbs */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
         <div 
-          className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px]"
-          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.1) 0%, transparent 70%)' }}
+          className="absolute top-0 left-0 w-[400px] h-[400px] rounded-full blur-[100px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.06) 0%, transparent 70%)' }}
         />
         <div 
-          className="absolute top-1/3 right-0 w-[400px] h-[400px] rounded-full blur-[80px]"
-          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.1) 0%, transparent 70%)' }}
-        />
-        <div 
-          className="absolute bottom-0 left-1/3 w-[600px] h-[400px] rounded-full blur-[120px]"
-          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.08) 0%, transparent 70%)' }}
+          className="absolute bottom-0 right-0 w-[350px] h-[350px] rounded-full blur-[80px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.06) 0%, transparent 70%)' }}
         />
       </div>
 
@@ -185,15 +176,15 @@ export function ServicesSection() {
             Nos Solutions
           </span>
           <h2 
-            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow"
+            className="text-2xl md:text-3xl lg:text-4xl font-black text-foreground mb-3 text-shadow"
             style={{ 
               opacity: isSectionVisible ? 1 : 0,
-              transform: isSectionVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
-              transition: 'all 1s ease-out 0.2s'
+              transform: isSectionVisible ? 'rotateX(0) translateY(0)' : 'rotateX(15deg) translateY(30px)',
+              transition: 'all 0.8s ease-out 0.2s'
             }}
           >
             Votre transition énergétique{' '}
-            <span className="text-gradient animate-text-shimmer">sur mesure</span>
+            <span className="text-gradient">sur mesure</span>
           </h2>
           <p 
             className="text-lg text-muted-foreground max-w-2xl mx-auto"

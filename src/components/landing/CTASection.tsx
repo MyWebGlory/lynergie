@@ -4,13 +4,8 @@ import { Button } from '@/components/ui/button';
 import { SectionFloatingIcons } from './SectionFloatingIcons';
 
 const floatingIcons = [
-  { Icon: Sun, position: 'top-[5%] left-[3%]', delay: '0s', color: 'primary' as const, size: 'lg' as const },
-  { Icon: Sparkles, position: 'top-[10%] right-[5%]', delay: '0.8s', color: 'accent' as const, size: 'md' as const },
-  { Icon: Leaf, position: 'top-[35%] left-[4%]', delay: '1.5s', color: 'accent' as const, size: 'lg' as const },
-  { Icon: Zap, position: 'top-[50%] right-[3%]', delay: '2s', color: 'primary' as const, size: 'md' as const },
-  { Icon: Home, position: 'bottom-[40%] left-[5%]', delay: '2.5s', color: 'primary' as const, size: 'md' as const },
-  { Icon: TrendingDown, position: 'bottom-[25%] right-[6%]', delay: '3s', color: 'accent' as const, size: 'lg' as const },
-  { Icon: Sun, position: 'bottom-[10%] left-[8%]', delay: '3.5s', color: 'accent' as const, size: 'md' as const },
+  { Icon: Sun, position: 'top-[10%] left-[4%]', delay: '0s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Leaf, position: 'bottom-[20%] right-[5%]', delay: '2.5s', color: 'accent' as const, size: 'md' as const },
 ];
 
 export function CTASection() {
@@ -20,11 +15,11 @@ export function CTASection() {
     <section 
       ref={ref} 
       id="contact" 
-      className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.2) 40%, hsl(var(--primary)/0.05) 60%, hsl(var(--background)) 100%)' }}
+      className="relative py-16 md:py-20 overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.15) 50%, hsl(var(--background)) 100%)' }}
     >
       {/* Floating icons */}
-      <SectionFloatingIcons icons={floatingIcons} opacity={0.5} />
+      <SectionFloatingIcons icons={floatingIcons} opacity={0.25} />
 
       {/* Animated background */}
       <div className="absolute inset-0">
@@ -64,15 +59,15 @@ export function CTASection() {
 
           {/* Main heading */}
           <h2 
-            className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 text-shadow-lg"
+            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-5 text-shadow-lg"
             style={{ 
               opacity: isVisible ? 1 : 0,
-              transform: isVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
-              transition: 'all 1s ease-out 0.2s'
+              transform: isVisible ? 'rotateX(0) translateY(0)' : 'rotateX(15deg) translateY(30px)',
+              transition: 'all 0.8s ease-out 0.2s'
             }}
           >
             Prêt à réduire vos factures de{' '}
-            <span className="text-gradient animate-text-shimmer">70%</span> ?
+            <span className="text-gradient">70%</span> ?
           </h2>
 
           {/* Subtitle */}
