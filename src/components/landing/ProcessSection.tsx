@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { Phone, Search, FileText, ClipboardCheck, Wrench, Shield, Check, Zap, Home, Sun, Leaf } from 'lucide-react';
 import { SectionFloatingIcons } from './SectionFloatingIcons';
@@ -55,6 +55,7 @@ export function ProcessSection() {
   const pinnedRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const [headerRef, isHeaderVisible] = useIntersectionObserver({ threshold: 0.3 });
+  const [gsapLoaded, setGsapLoaded] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -63,79 +64,90 @@ export function ProcessSection() {
 
     if (!section || !pinned || !timeline) return;
 
-    // Dynamic import to avoid SSR issues
+    let ctx: any;
+    let mm: any;
+
     const initGSAP = async () => {
-      const { gsap } = await import('gsap');
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger');
-      
-      gsap.registerPlugin(ScrollTrigger);
+      try {
+        const gsapModule = await import('gsap');
+        const scrollTriggerModule = await import('gsap/ScrollTrigger');
+        
+        const gsap = gsapModule.gsap;
+        const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+        
+        gsap.registerPlugin(ScrollTrigger);
+        setGsapLoaded(true);
 
-      // Only apply pinning on desktop
-      const mm = gsap.matchMedia();
+        mm = gsap.matchMedia();
 
-      mm.add('(min-width: 1024px)', () => {
-        // Pin the left side while scrolling through the timeline
-        ScrollTrigger.create({
-          trigger: section,
-          start: 'top top+=100',
-          end: () => `+=${timeline.offsetHeight - pinned.offsetHeight + 100}`,
-          pin: pinned,
-          pinSpacing: false,
-        });
+        mm.add('(min-width: 1024px)', () => {
+          // Pin the left side while scrolling through the timeline
+          const pinTrigger = ScrollTrigger.create({
+            trigger: section,
+            start: 'top top+=100',
+            end: () => `+=${timeline.offsetHeight - pinned.offsetHeight + 200}`,
+            pin: pinned,
+            pinSpacing: false,
+          });
 
-        // Animate each step
-        const stepElements = timeline.querySelectorAll('.process-step');
-        stepElements.forEach((step) => {
-          gsap.fromTo(
-            step,
-            { opacity: 0, x: 50, rotateY: 15 },
-            {
-              opacity: 1,
-              x: 0,
-              rotateY: 0,
-              duration: 0.8,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: step,
-                start: 'top 80%',
-                end: 'top 50%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-
-          // Animate the connecting line
-          const line = step.querySelector('.connecting-line-fill');
-          if (line) {
+          // Animate each step
+          const stepElements = timeline.querySelectorAll('.process-step');
+          stepElements.forEach((step, index) => {
             gsap.fromTo(
-              line,
-              { scaleY: 0 },
+              step,
+              { opacity: 0, x: 60, rotateY: 20 },
               {
-                scaleY: 1,
-                duration: 0.6,
-                ease: 'power2.out',
+                opacity: 1,
+                x: 0,
+                rotateY: 0,
+                duration: 0.8,
+                ease: 'power3.out',
                 scrollTrigger: {
                   trigger: step,
-                  start: 'top 60%',
-                  end: 'bottom 60%',
+                  start: 'top 85%',
+                  end: 'top 50%',
                   toggleActions: 'play none none reverse',
                 },
               }
             );
-          }
+
+            // Animate the connecting line
+            const line = step.querySelector('.connecting-line-fill');
+            if (line) {
+              gsap.fromTo(
+                line,
+                { scaleY: 0 },
+                {
+                  scaleY: 1,
+                  duration: 0.6,
+                  ease: 'power2.out',
+                  scrollTrigger: {
+                    trigger: step,
+                    start: 'top 70%',
+                    end: 'bottom 60%',
+                    toggleActions: 'play none none reverse',
+                  },
+                }
+              );
+            }
+          });
+
+          return () => {
+            pinTrigger.kill();
+          };
         });
-
-        return () => {
-          ScrollTrigger.getAll().forEach((t) => t.kill());
-        };
-      });
-
-      return () => {
-        mm.revert();
-      };
+      } catch (error) {
+        console.error('Failed to load GSAP:', error);
+      }
     };
 
     initGSAP();
+
+    return () => {
+      if (mm) {
+        mm.revert();
+      }
+    };
   }, []);
 
   return (
@@ -158,21 +170,33 @@ export function ProcessSection() {
               className={`transition-all duration-1000 ${isHeaderVisible ? 'opacity-100' : 'opacity-0'}`}
             >
               <span 
-                className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4 animate-tilt-in"
-                style={{ animationDelay: '0.1s' }}
+                className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4"
+                style={{ 
+                  opacity: isHeaderVisible ? 1 : 0,
+                  transform: isHeaderVisible ? 'rotateX(0) translateY(0)' : 'rotateX(20deg) translateY(20px)',
+                  transition: 'all 0.8s ease-out 0.1s'
+                }}
               >
                 Notre Processus
               </span>
               <h2 
-                className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6 text-shadow animate-title-reveal"
-                style={{ animationDelay: '0.2s' }}
+                className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6 text-shadow"
+                style={{ 
+                  opacity: isHeaderVisible ? 1 : 0,
+                  transform: isHeaderVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
+                  transition: 'all 1s ease-out 0.2s'
+                }}
               >
                 Un accompagnement{' '}
                 <span className="text-gradient inline-block animate-text-shimmer">de A à Z</span>
               </h2>
               <p 
-                className="text-lg text-muted-foreground mb-8 animate-fade-in-up"
-                style={{ animationDelay: '0.4s' }}
+                className="text-lg text-muted-foreground mb-8"
+                style={{ 
+                  opacity: isHeaderVisible ? 1 : 0,
+                  transform: isHeaderVisible ? 'translateY(0)' : 'translateY(30px)',
+                  transition: 'all 0.8s ease-out 0.4s'
+                }}
               >
                 De votre premier appel à la mise en service, nous gérons tout. 
                 Concentrez-vous sur les économies, on s'occupe du reste.
@@ -181,17 +205,25 @@ export function ProcessSection() {
               {/* Quick stats with animation */}
               <div className="grid grid-cols-2 gap-4">
                 <div 
-                  className="p-4 rounded-2xl glass hover-lift animate-fade-in-up"
-                  style={{ animationDelay: '0.5s' }}
+                  className="p-4 rounded-2xl glass hover-lift"
+                  style={{ 
+                    opacity: isHeaderVisible ? 1 : 0,
+                    transform: isHeaderVisible ? 'translateY(0)' : 'translateY(30px)',
+                    transition: 'all 0.8s ease-out 0.5s'
+                  }}
                 >
                   <div className="text-2xl font-bold text-primary mb-1 animate-bounce-subtle">48h</div>
                   <div className="text-sm text-muted-foreground">Délai d'étude</div>
                 </div>
                 <div 
-                  className="p-4 rounded-2xl glass hover-lift animate-fade-in-up"
-                  style={{ animationDelay: '0.6s' }}
+                  className="p-4 rounded-2xl glass hover-lift"
+                  style={{ 
+                    opacity: isHeaderVisible ? 1 : 0,
+                    transform: isHeaderVisible ? 'translateY(0)' : 'translateY(30px)',
+                    transition: 'all 0.8s ease-out 0.6s'
+                  }}
                 >
-                  <div className="text-2xl font-bold text-accent mb-1 animate-bounce-subtle" style={{ animationDelay: '0.3s' }}>100%</div>
+                  <div className="text-2xl font-bold text-accent mb-1 animate-bounce-subtle">100%</div>
                   <div className="text-sm text-muted-foreground">Aides gérées</div>
                 </div>
               </div>
@@ -204,7 +236,10 @@ export function ProcessSection() {
               <div
                 key={step.number}
                 className="process-step relative"
-                style={{ perspective: '1000px' }}
+                style={{ 
+                  perspective: '1000px',
+                  opacity: gsapLoaded ? undefined : 1 // Show immediately if GSAP hasn't loaded
+                }}
               >
                 <div className="flex gap-6">
                   {/* Timeline */}

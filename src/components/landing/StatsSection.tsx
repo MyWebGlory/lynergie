@@ -50,7 +50,7 @@ const floatingIcons = [
   { Icon: Wind, position: 'bottom-[40%] left-[8%]', delay: '2s', color: 'accent' as const },
 ];
 
-function StatCard({ stat, index }: { stat: typeof stats[0]; index: number }) {
+function StatCard({ stat, index, isSectionVisible }: { stat: typeof stats[0]; index: number; isSectionVisible: boolean }) {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.3 });
   const count = useCountUp(stat.value, stat.decimals, 2000, isVisible);
 
@@ -62,9 +62,10 @@ function StatCard({ stat, index }: { stat: typeof stats[0]; index: number }) {
   return (
     <div
       ref={ref}
-      className="opacity-0"
       style={{ 
-        animation: isVisible ? `slide-up-fade 0.8s ease-out ${index * 0.15}s forwards` : 'none'
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0) rotateX(0)' : 'translateY(40px) rotateX(15deg)',
+        transition: `all 0.8s ease-out ${index * 0.15}s`
       }}
     >
       <div className="group relative p-8 rounded-3xl glass hover-lift h-full" style={{ perspective: '1000px' }}>
@@ -121,26 +122,32 @@ export function StatsSection() {
           style={{ perspective: '1000px' }}
         >
           <span 
-            className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4 opacity-0"
+            className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4"
             style={{ 
-              animation: isSectionVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'rotateX(0) translateY(0)' : 'rotateX(20deg) translateY(20px)',
+              transition: 'all 0.8s ease-out 0.1s'
             }}
           >
             Nos Résultats
           </span>
           <h2 
-            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow opacity-0"
+            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow"
             style={{ 
-              animation: isSectionVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
+              transition: 'all 1s ease-out 0.2s'
             }}
           >
             Des chiffres qui{' '}
             <span className="text-gradient animate-text-shimmer">parlent</span>
           </h2>
           <p 
-            className="text-lg text-muted-foreground max-w-2xl mx-auto opacity-0"
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
             style={{ 
-              animation: isSectionVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'translateY(0)' : 'translateY(30px)',
+              transition: 'all 0.8s ease-out 0.4s'
             }}
           >
             Plus d'une décennie d'excellence au service de votre transition énergétique
@@ -150,7 +157,7 @@ export function StatsSection() {
         {/* Stats grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
-            <StatCard key={stat.label} stat={stat} index={index} />
+            <StatCard key={stat.label} stat={stat} index={index} isSectionVisible={isSectionVisible} />
           ))}
         </div>
       </div>
