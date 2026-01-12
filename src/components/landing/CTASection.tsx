@@ -1,12 +1,23 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { Phone, Clock, FileCheck, Sparkles, Zap, TrendingDown } from 'lucide-react';
+import { Phone, Clock, FileCheck, Sparkles, Zap, TrendingDown, Sun, Leaf, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SectionFloatingIcons } from './SectionFloatingIcons';
+
+const floatingIcons = [
+  { Icon: Sun, position: 'top-[10%] left-[5%]', delay: '0s', color: 'primary' as const },
+  { Icon: Leaf, position: 'top-[20%] right-[8%]', delay: '1.5s', color: 'accent' as const },
+  { Icon: Home, position: 'bottom-[25%] left-[3%]', delay: '2.5s', color: 'accent' as const },
+  { Icon: Zap, position: 'bottom-[15%] right-[5%]', delay: '3s', color: 'primary' as const },
+];
 
 export function CTASection() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2 });
 
   return (
     <section ref={ref} id="contact" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Floating icons */}
+      <SectionFloatingIcons icons={floatingIcons} />
+
       {/* Animated background */}
       <div className="absolute inset-0">
         {/* Gradient orbs */}
@@ -27,10 +38,13 @@ export function CTASection() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center" style={{ perspective: '1000px' }}>
           {/* FOMO Badge */}
           <div 
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-destructive/10 border border-destructive/20 mb-8 animate-on-scroll ${isVisible ? 'visible' : ''}`}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-destructive/10 border border-destructive/20 mb-8 opacity-0"
+            style={{ 
+              animation: isVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+            }}
           >
             <Zap className="w-4 h-4 text-destructive animate-pulse" />
             <span className="text-destructive font-semibold text-sm">
@@ -40,17 +54,21 @@ export function CTASection() {
 
           {/* Main heading */}
           <h2 
-            className={`text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 text-shadow-lg animate-on-scroll ${isVisible ? 'visible' : ''}`}
-            style={{ transitionDelay: '0.1s' }}
+            className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 text-shadow-lg opacity-0"
+            style={{ 
+              animation: isVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+            }}
           >
             Prêt à réduire vos factures de{' '}
-            <span className="text-gradient">70%</span> ?
+            <span className="text-gradient animate-text-shimmer">70%</span> ?
           </h2>
 
           {/* Subtitle */}
           <p 
-            className={`text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-on-scroll ${isVisible ? 'visible' : ''}`}
-            style={{ transitionDelay: '0.2s' }}
+            className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto opacity-0"
+            style={{ 
+              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+            }}
           >
             Appelez maintenant pour une estimation gratuite et personnalisée. 
             Nos experts sont disponibles pour répondre à toutes vos questions.
@@ -58,8 +76,10 @@ export function CTASection() {
 
           {/* CTA Button - XXL */}
           <div 
-            className={`mb-10 animate-on-scroll ${isVisible ? 'visible' : ''}`}
-            style={{ transitionDelay: '0.3s' }}
+            className="mb-10 opacity-0"
+            style={{ 
+              animation: isVisible ? 'scale-in 0.8s ease-out 0.5s forwards' : 'none' 
+            }}
           >
             <Button
               asChild
@@ -68,7 +88,7 @@ export function CTASection() {
             >
               <a href="tel:0623666839" className="flex items-center gap-4">
                 <div className="relative">
-                  <Phone className="w-7 h-7" />
+                  <Phone className="w-7 h-7 animate-bounce-subtle" />
                   {/* Pulse rings */}
                   <div className="absolute inset-0 animate-pulse-ring">
                     <Phone className="w-7 h-7 text-primary-foreground/50" />
@@ -84,18 +104,20 @@ export function CTASection() {
 
           {/* Trust indicators */}
           <div 
-            className={`flex flex-wrap justify-center gap-6 md:gap-10 mb-10 animate-on-scroll ${isVisible ? 'visible' : ''}`}
-            style={{ transitionDelay: '0.4s' }}
+            className="flex flex-wrap justify-center gap-6 md:gap-10 mb-10 opacity-0"
+            style={{ 
+              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.6s forwards' : 'none' 
+            }}
           >
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <Clock className="w-5 h-5 text-primary" />
               <span>Réponse en -2h</span>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <FileCheck className="w-5 h-5 text-primary" />
               <span>Devis gratuit</span>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <Sparkles className="w-5 h-5 text-primary" />
               <span>Sans engagement</span>
             </div>
@@ -103,8 +125,10 @@ export function CTASection() {
 
           {/* Availability */}
           <div 
-            className={`inline-flex items-center gap-3 px-6 py-3 rounded-full glass animate-on-scroll ${isVisible ? 'visible' : ''}`}
-            style={{ transitionDelay: '0.5s' }}
+            className="inline-flex items-center gap-3 px-6 py-3 rounded-full glass opacity-0"
+            style={{ 
+              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.7s forwards' : 'none' 
+            }}
           >
             <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
             <span className="text-foreground font-medium">
@@ -114,8 +138,10 @@ export function CTASection() {
 
           {/* Savings visualization */}
           <div 
-            className={`mt-12 p-6 rounded-3xl glass max-w-md mx-auto animate-on-scroll ${isVisible ? 'visible' : ''}`}
-            style={{ transitionDelay: '0.6s' }}
+            className="mt-12 p-6 rounded-3xl glass max-w-md mx-auto opacity-0"
+            style={{ 
+              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.8s forwards' : 'none' 
+            }}
           >
             <div className="flex items-center justify-between mb-4">
               <span className="text-muted-foreground">Économies moyennes</span>

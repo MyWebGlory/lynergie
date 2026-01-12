@@ -157,6 +157,23 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
+        "tilt-in": {
+          "0%": { opacity: "0", transform: "rotateX(20deg) translateY(20px)" },
+          "100%": { opacity: "1", transform: "rotateX(0) translateY(0)" },
+        },
+        "title-reveal": {
+          "0%": { opacity: "0", transform: "rotateX(25deg) translateY(40px) skewX(-5deg)" },
+          "100%": { opacity: "1", transform: "rotateX(0) translateY(0) skewX(0)" },
+        },
+        "text-shimmer": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+        "slide-up-fade": {
+          "0%": { opacity: "0", transform: "translateY(30px) rotateX(10deg)" },
+          "100%": { opacity: "1", transform: "translateY(0) rotateX(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -181,6 +198,10 @@ export default {
         "bounce-subtle": "bounce-subtle 2s ease-in-out infinite",
         "rotate-slow": "rotate-slow 20s linear infinite",
         "shimmer": "shimmer 2s linear infinite",
+        "tilt-in": "tilt-in 0.8s ease-out forwards",
+        "title-reveal": "title-reveal 1s ease-out forwards",
+        "text-shimmer": "text-shimmer 4s ease infinite",
+        "slide-up-fade": "slide-up-fade 0.8s ease-out forwards",
       },
     },
   },

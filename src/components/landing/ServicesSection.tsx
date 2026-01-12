@@ -1,6 +1,7 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useParallax } from '@/hooks/useParallax';
-import { ArrowRight, Sun, Thermometer, Wind, Zap } from 'lucide-react';
+import { ArrowRight, Sun, Thermometer, Wind, Zap, Leaf, Home, Car } from 'lucide-react';
+import { SectionFloatingIcons } from './SectionFloatingIcons';
 
 import solarImg from '@/assets/services/panneaux-solaires.avif';
 import heatPumpImg from '@/assets/services/pompe-chaleur.avif';
@@ -50,6 +51,14 @@ const services = [
   },
 ];
 
+const floatingIcons = [
+  { Icon: Sun, position: 'top-[8%] left-[5%]', delay: '0s', color: 'primary' as const },
+  { Icon: Leaf, position: 'top-[15%] right-[8%]', delay: '1s', color: 'accent' as const },
+  { Icon: Home, position: 'bottom-[25%] left-[3%]', delay: '2s', color: 'accent' as const },
+  { Icon: Car, position: 'bottom-[10%] right-[5%]', delay: '3s', color: 'primary' as const },
+  { Icon: Zap, position: 'top-[50%] right-[3%]', delay: '1.5s', color: 'primary' as const },
+];
+
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2 });
   const isEven = index % 2 === 0;
@@ -57,10 +66,18 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
   return (
     <div
       ref={ref}
-      className={`group ${isEven ? 'animate-on-scroll-left' : 'animate-on-scroll-right'} ${isVisible ? 'visible' : ''}`}
-      style={{ transitionDelay: `${index * 0.1}s` }}
+      className="group opacity-0"
+      style={{ 
+        perspective: '1000px',
+        animation: isVisible 
+          ? `${isEven ? 'fade-in-left' : 'fade-in-right'} 0.8s ease-out ${index * 0.15}s forwards` 
+          : 'none'
+      }}
     >
-      <div className="relative h-full rounded-3xl overflow-hidden glass hover-lift cursor-pointer">
+      <div 
+        className="relative h-full rounded-3xl overflow-hidden glass hover-lift cursor-pointer transition-transform duration-500"
+        style={{ transformStyle: 'preserve-3d' }}
+      >
         {/* Background image */}
         <div className="absolute inset-0">
           <img
@@ -77,7 +94,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
         <div className="relative p-8 h-full flex flex-col justify-end min-h-[400px]">
           {/* Icon badge */}
           <div className="absolute top-6 right-6">
-            <div className="p-3 rounded-2xl glass group-hover:bg-primary/20 transition-colors duration-300">
+            <div className="p-3 rounded-2xl glass group-hover:bg-primary/20 group-hover:rotate-12 transition-all duration-300">
               <service.Icon className="w-6 h-6 text-primary" />
             </div>
           </div>
@@ -101,7 +118,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
           {/* CTA */}
           <div className="flex items-center gap-2 text-primary font-semibold group-hover:gap-4 transition-all duration-300">
             <span>En savoir plus</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
           </div>
         </div>
 
@@ -120,26 +137,47 @@ export function ServicesSection() {
 
   return (
     <section ref={sectionRef} id="services" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Floating icons */}
+      <SectionFloatingIcons icons={floatingIcons} />
+
       {/* Parallax background */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
-        <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-orb-1" />
+        <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-orb-2" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4">
-        {/* Section header */}
-        <div className={`text-center mb-16 animate-on-scroll ${isSectionVisible ? 'visible' : ''}`}>
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4">
+        {/* Section header with tilt */}
+        <div 
+          className="text-center mb-16"
+          style={{ perspective: '1000px' }}
+        >
+          <span 
+            className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4 opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+            }}
+          >
             Nos Solutions
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow">
+          <h2 
+            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+            }}
+          >
             Votre transition énergétique{' '}
-            <span className="text-gradient">sur mesure</span>
+            <span className="text-gradient animate-text-shimmer">sur mesure</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p 
+            className="text-lg text-muted-foreground max-w-2xl mx-auto opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+            }}
+          >
             Des solutions adaptées à vos besoins, installées par des experts certifiés RGE
           </p>
         </div>

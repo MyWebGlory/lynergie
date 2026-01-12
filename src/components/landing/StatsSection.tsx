@@ -1,7 +1,8 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useCountUp } from '@/hooks/useCountUp';
 import { useParallax } from '@/hooks/useParallax';
-import { Home, Award, Star, TrendingUp } from 'lucide-react';
+import { Home, Award, Star, TrendingUp, Sun, Leaf, Zap, Wind } from 'lucide-react';
+import { SectionFloatingIcons } from './SectionFloatingIcons';
 
 const stats = [
   { 
@@ -42,6 +43,13 @@ const stats = [
   },
 ];
 
+const floatingIcons = [
+  { Icon: Sun, position: 'top-[5%] right-[10%]', delay: '0s', color: 'primary' as const },
+  { Icon: Leaf, position: 'top-[40%] left-[3%]', delay: '1.5s', color: 'accent' as const },
+  { Icon: Zap, position: 'bottom-[20%] right-[5%]', delay: '3s', color: 'primary' as const },
+  { Icon: Wind, position: 'bottom-[40%] left-[8%]', delay: '2s', color: 'accent' as const },
+];
+
 function StatCard({ stat, index }: { stat: typeof stats[0]; index: number }) {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.3 });
   const count = useCountUp(stat.value, stat.decimals, 2000, isVisible);
@@ -54,12 +62,14 @@ function StatCard({ stat, index }: { stat: typeof stats[0]; index: number }) {
   return (
     <div
       ref={ref}
-      className={`animate-on-scroll-scale ${isVisible ? 'visible' : ''}`}
-      style={{ transitionDelay: `${index * 0.15}s` }}
+      className="opacity-0"
+      style={{ 
+        animation: isVisible ? `slide-up-fade 0.8s ease-out ${index * 0.15}s forwards` : 'none'
+      }}
     >
-      <div className="group relative p-8 rounded-3xl glass hover-lift h-full">
+      <div className="group relative p-8 rounded-3xl glass hover-lift h-full" style={{ perspective: '1000px' }}>
         {/* Icon */}
-        <div className={`inline-flex p-4 rounded-2xl ${colorClasses[stat.color as keyof typeof colorClasses]} mb-6 transition-transform duration-300 group-hover:scale-110`}>
+        <div className={`inline-flex p-4 rounded-2xl ${colorClasses[stat.color as keyof typeof colorClasses]} mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6`}>
           <stat.Icon className="w-7 h-7" />
         </div>
 
@@ -92,26 +102,47 @@ export function StatsSection() {
 
   return (
     <section ref={sectionRef} id="stats" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Floating icons */}
+      <SectionFloatingIcons icons={floatingIcons} />
+
       {/* Parallax background elements */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
-        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-orb-1" />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-orb-2" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4">
-        {/* Section header */}
-        <div className={`text-center mb-16 animate-on-scroll ${isSectionVisible ? 'visible' : ''}`}>
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4">
+        {/* Section header with tilt animation */}
+        <div 
+          className="text-center mb-16"
+          style={{ perspective: '1000px' }}
+        >
+          <span 
+            className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4 opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+            }}
+          >
             Nos Résultats
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow">
+          <h2 
+            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+            }}
+          >
             Des chiffres qui{' '}
-            <span className="text-gradient">parlent</span>
+            <span className="text-gradient animate-text-shimmer">parlent</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p 
+            className="text-lg text-muted-foreground max-w-2xl mx-auto opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+            }}
+          >
             Plus d'une décennie d'excellence au service de votre transition énergétique
           </p>
         </div>

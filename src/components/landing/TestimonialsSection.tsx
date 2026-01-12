@@ -1,7 +1,8 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useParallax } from '@/hooks/useParallax';
 import { YouTubeEmbed } from './YouTubeEmbed';
-import { Star, Quote, BadgeCheck } from 'lucide-react';
+import { Star, Quote, BadgeCheck, Sun, Leaf, Home, Zap } from 'lucide-react';
+import { SectionFloatingIcons } from './SectionFloatingIcons';
 
 const videoTestimonials = [
   { id: '75adOPvX8Uc', title: 'Témoignage client - Installation solaire' },
@@ -40,20 +41,30 @@ const reviews = [
   },
 ];
 
+const floatingIcons = [
+  { Icon: Star, position: 'top-[5%] right-[8%]', delay: '0s', color: 'primary' as const },
+  { Icon: Sun, position: 'top-[30%] left-[3%]', delay: '1.5s', color: 'accent' as const },
+  { Icon: Home, position: 'bottom-[20%] right-[5%]', delay: '2.5s', color: 'primary' as const },
+  { Icon: Leaf, position: 'bottom-[35%] left-[5%]', delay: '3.5s', color: 'accent' as const },
+];
+
 function ReviewCard({ review, index }: { review: typeof reviews[0]; index: number }) {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2 });
 
   return (
     <div
       ref={ref}
-      className={`animate-on-scroll-scale ${isVisible ? 'visible' : ''}`}
-      style={{ transitionDelay: `${index * 0.1}s` }}
+      className="opacity-0"
+      style={{ 
+        perspective: '1000px',
+        animation: isVisible ? `slide-up-fade 0.8s ease-out ${index * 0.1}s forwards` : 'none' 
+      }}
     >
-      <div className="h-full p-6 rounded-2xl glass hover-lift">
+      <div className="h-full p-6 rounded-2xl glass hover-lift group">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-lg font-bold text-primary-foreground">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-lg font-bold text-primary-foreground group-hover:scale-110 transition-transform duration-300">
               {review.name.charAt(0)}
             </div>
             <div>
@@ -67,10 +78,14 @@ function ReviewCard({ review, index }: { review: typeof reviews[0]; index: numbe
           <Quote className="w-8 h-8 text-primary/20" />
         </div>
 
-        {/* Stars */}
+        {/* Stars with animation */}
         <div className="flex gap-1 mb-4">
           {[...Array(review.rating)].map((_, i) => (
-            <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+            <Star 
+              key={i} 
+              className="w-4 h-4 fill-primary text-primary"
+              style={{ animation: isVisible ? `scale-in 0.3s ease-out ${0.3 + i * 0.1}s forwards` : 'none' }}
+            />
           ))}
         </div>
 
@@ -90,33 +105,59 @@ export function TestimonialsSection() {
 
   return (
     <section ref={sectionRef} id="testimonials" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Floating icons */}
+      <SectionFloatingIcons icons={floatingIcons} />
+
       {/* Parallax background */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
-        <div className="absolute top-1/3 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-orb-1" />
+        <div className="absolute bottom-1/3 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-orb-2" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4">
-        {/* Section header */}
-        <div className={`text-center mb-16 animate-on-scroll ${isSectionVisible ? 'visible' : ''}`}>
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4">
+        {/* Section header with tilt */}
+        <div 
+          className="text-center mb-16"
+          style={{ perspective: '1000px' }}
+        >
+          <span 
+            className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4 opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+            }}
+          >
             Témoignages
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow">
+          <h2 
+            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+            }}
+          >
             Ils nous font{' '}
-            <span className="text-gradient">confiance</span>
+            <span className="text-gradient animate-text-shimmer">confiance</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p 
+            className="text-lg text-muted-foreground max-w-2xl mx-auto opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+            }}
+          >
             Découvrez les retours de nos clients satisfaits à travers la région
           </p>
         </div>
 
         {/* Video testimonials */}
-        <div className={`mb-16 animate-on-scroll ${isSectionVisible ? 'visible' : ''} stagger-2`}>
-          <div className="flex items-center justify-center gap-2 mb-8">
+        <div className="mb-16">
+          <div 
+            className="flex items-center justify-center gap-2 mb-8 opacity-0"
+            style={{ 
+              animation: isSectionVisible ? 'fade-in-up 0.6s ease-out 0.3s forwards' : 'none' 
+            }}
+          >
             <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
             <span className="text-sm font-semibold text-foreground">Témoignages vidéo</span>
           </div>
@@ -125,8 +166,11 @@ export function TestimonialsSection() {
             {videoTestimonials.map((video, index) => (
               <div 
                 key={video.id}
-                className={`animate-on-scroll-scale ${isSectionVisible ? 'visible' : ''}`}
-                style={{ transitionDelay: `${0.3 + index * 0.15}s` }}
+                className="opacity-0"
+                style={{ 
+                  perspective: '1000px',
+                  animation: isSectionVisible ? `slide-up-fade 0.8s ease-out ${0.4 + index * 0.15}s forwards` : 'none' 
+                }}
               >
                 <div className="rounded-2xl overflow-hidden glass p-2 hover-lift">
                   <div className="aspect-video rounded-xl overflow-hidden">
@@ -139,7 +183,12 @@ export function TestimonialsSection() {
         </div>
 
         {/* Google reviews badge */}
-        <div className="flex justify-center mb-8">
+        <div 
+          className="flex justify-center mb-8 opacity-0"
+          style={{ 
+            animation: isSectionVisible ? 'scale-in 0.6s ease-out 0.7s forwards' : 'none' 
+          }}
+        >
           <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full glass">
             <div className="flex gap-1">
               {[...Array(5)].map((_, i) => (
