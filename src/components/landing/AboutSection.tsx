@@ -39,10 +39,13 @@ const benefits = [
 ];
 
 const floatingIcons = [
-  { Icon: Sun, position: 'top-[8%] left-[5%]', delay: '0s', color: 'primary' as const },
-  { Icon: Leaf, position: 'top-[25%] right-[5%]', delay: '1s', color: 'accent' as const },
-  { Icon: Wind, position: 'bottom-[30%] left-[3%]', delay: '2s', color: 'accent' as const },
-  { Icon: Zap, position: 'bottom-[15%] right-[8%]', delay: '3s', color: 'primary' as const },
+  { Icon: Sun, position: 'top-[5%] left-[3%]', delay: '0s', color: 'primary' as const, size: 'lg' as const },
+  { Icon: Leaf, position: 'top-[12%] right-[6%]', delay: '0.8s', color: 'accent' as const, size: 'md' as const },
+  { Icon: PiggyBank, position: 'top-[35%] left-[2%]', delay: '1.5s', color: 'accent' as const, size: 'lg' as const },
+  { Icon: Zap, position: 'top-[50%] right-[4%]', delay: '2s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Home, position: 'bottom-[40%] left-[5%]', delay: '2.5s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Wind, position: 'bottom-[25%] right-[3%]', delay: '3s', color: 'accent' as const, size: 'lg' as const },
+  { Icon: TrendingUp, position: 'bottom-[10%] left-[8%]', delay: '3.5s', color: 'accent' as const, size: 'md' as const },
 ];
 
 export function AboutSection() {
@@ -50,17 +53,32 @@ export function AboutSection() {
   const parallaxOffset = useParallax(0.1);
 
   return (
-    <section id="about" className="relative py-24 lg:py-32 overflow-hidden" ref={ref}>
+    <section 
+      id="about" 
+      className="relative py-24 lg:py-32 overflow-hidden" 
+      ref={ref}
+      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.25) 50%, hsl(var(--background)) 100%)' }}
+    >
       {/* Floating icons */}
-      <SectionFloatingIcons icons={floatingIcons} />
+      <SectionFloatingIcons icons={floatingIcons} opacity={0.5} />
 
-      {/* Parallax background */}
+      {/* Enhanced gradient orbs */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
-        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/5 rounded-full blur-3xl animate-orb-1" />
-        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-accent/5 rounded-full blur-3xl animate-orb-2" />
+        <div 
+          className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[120px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.12) 0%, transparent 70%)' }}
+        />
+        <div 
+          className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.12) 0%, transparent 70%)' }}
+        />
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-[80px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.06) 0%, transparent 70%)' }}
+        />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
