@@ -44,12 +44,8 @@ const stats = [
 ];
 
 const floatingIcons = [
-  { Icon: Sun, position: 'top-[5%] left-[5%]', delay: '0s', color: 'primary' as const, size: 'lg' as const },
-  { Icon: TrendingUp, position: 'top-[10%] right-[8%]', delay: '1s', color: 'accent' as const, size: 'md' as const },
-  { Icon: Leaf, position: 'top-[40%] left-[3%]', delay: '1.5s', color: 'accent' as const, size: 'lg' as const },
-  { Icon: Home, position: 'top-[55%] right-[4%]', delay: '2s', color: 'primary' as const, size: 'md' as const },
-  { Icon: Zap, position: 'bottom-[25%] left-[6%]', delay: '2.5s', color: 'primary' as const, size: 'md' as const },
-  { Icon: Wind, position: 'bottom-[15%] right-[5%]', delay: '3s', color: 'accent' as const, size: 'lg' as const },
+  { Icon: Sun, position: 'top-[10%] left-[5%]', delay: '0s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Leaf, position: 'bottom-[15%] right-[6%]', delay: '2.5s', color: 'accent' as const, size: 'md' as const },
 ];
 
 function StatCard({ stat, index, isSectionVisible }: { stat: typeof stats[0]; index: number; isSectionVisible: boolean }) {
@@ -107,24 +103,24 @@ export function StatsSection() {
     <section 
       ref={sectionRef} 
       id="stats" 
-      className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, hsl(var(--muted)/0.15) 0%, hsl(var(--background)) 30%, hsl(var(--muted)/0.1) 70%, hsl(var(--background)) 100%)' }}
+      className="relative py-16 md:py-20 overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, hsl(var(--muted)/0.1) 0%, hsl(var(--background)) 50%, hsl(var(--muted)/0.08) 100%)' }}
     >
       {/* Floating icons */}
-      <SectionFloatingIcons icons={floatingIcons} opacity={0.5} />
+      <SectionFloatingIcons icons={floatingIcons} opacity={0.25} />
 
-      {/* Enhanced gradient orbs */}
+      {/* Subtle gradient orbs */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
         <div 
-          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[100px]"
-          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.1) 0%, transparent 70%)' }}
+          className="absolute top-0 right-0 w-[350px] h-[350px] rounded-full blur-[80px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.06) 0%, transparent 70%)' }}
         />
         <div 
-          className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full blur-[80px]"
-          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.1) 0%, transparent 70%)' }}
+          className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full blur-[60px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.06) 0%, transparent 70%)' }}
         />
       </div>
 
@@ -145,15 +141,15 @@ export function StatsSection() {
             Nos Résultats
           </span>
           <h2 
-            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow"
+            className="text-2xl md:text-3xl lg:text-4xl font-black text-foreground mb-3 text-shadow"
             style={{ 
               opacity: isSectionVisible ? 1 : 0,
-              transform: isSectionVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
-              transition: 'all 1s ease-out 0.2s'
+              transform: isSectionVisible ? 'rotateX(0) translateY(0)' : 'rotateX(15deg) translateY(30px)',
+              transition: 'all 0.8s ease-out 0.2s'
             }}
           >
             Des chiffres qui{' '}
-            <span className="text-gradient animate-text-shimmer">parlent</span>
+            <span className="text-gradient">parlent</span>
           </h2>
           <p 
             className="text-lg text-muted-foreground max-w-2xl mx-auto"

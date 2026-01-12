@@ -39,13 +39,8 @@ const benefits = [
 ];
 
 const floatingIcons = [
-  { Icon: Sun, position: 'top-[5%] left-[3%]', delay: '0s', color: 'primary' as const, size: 'lg' as const },
-  { Icon: Leaf, position: 'top-[12%] right-[6%]', delay: '0.8s', color: 'accent' as const, size: 'md' as const },
-  { Icon: PiggyBank, position: 'top-[35%] left-[2%]', delay: '1.5s', color: 'accent' as const, size: 'lg' as const },
-  { Icon: Zap, position: 'top-[50%] right-[4%]', delay: '2s', color: 'primary' as const, size: 'md' as const },
-  { Icon: Home, position: 'bottom-[40%] left-[5%]', delay: '2.5s', color: 'primary' as const, size: 'md' as const },
-  { Icon: Wind, position: 'bottom-[25%] right-[3%]', delay: '3s', color: 'accent' as const, size: 'lg' as const },
-  { Icon: TrendingUp, position: 'bottom-[10%] left-[8%]', delay: '3.5s', color: 'accent' as const, size: 'md' as const },
+  { Icon: Sun, position: 'top-[8%] left-[4%]', delay: '0s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Leaf, position: 'bottom-[12%] right-[5%]', delay: '2s', color: 'accent' as const, size: 'md' as const },
 ];
 
 export function AboutSection() {
@@ -55,29 +50,25 @@ export function AboutSection() {
   return (
     <section 
       id="about" 
-      className="relative py-24 lg:py-32 overflow-hidden" 
+      className="relative py-16 lg:py-20 overflow-hidden" 
       ref={ref}
-      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.25) 50%, hsl(var(--background)) 100%)' }}
+      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.15) 50%, hsl(var(--background)) 100%)' }}
     >
       {/* Floating icons */}
-      <SectionFloatingIcons icons={floatingIcons} opacity={0.5} />
+      <SectionFloatingIcons icons={floatingIcons} opacity={0.25} />
 
-      {/* Enhanced gradient orbs */}
+      {/* Subtle gradient orbs */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
         <div 
-          className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[120px]"
-          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.12) 0%, transparent 70%)' }}
-        />
-        <div 
-          className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px]"
-          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.12) 0%, transparent 70%)' }}
-        />
-        <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-[80px]"
+          className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[100px]"
           style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.06) 0%, transparent 70%)' }}
+        />
+        <div 
+          className="absolute bottom-0 left-0 w-[350px] h-[350px] rounded-full blur-[80px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.06) 0%, transparent 70%)' }}
         />
       </div>
 
@@ -99,15 +90,15 @@ export function AboutSection() {
             Pourquoi nous choisir
           </span>
           <h2 
-            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6 text-shadow"
+            className="text-2xl md:text-3xl lg:text-4xl font-black text-foreground mb-4 text-shadow"
             style={{ 
               opacity: isVisible ? 1 : 0,
-              transform: isVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
-              transition: 'all 1s ease-out 0.2s'
+              transform: isVisible ? 'rotateX(0) translateY(0)' : 'rotateX(15deg) translateY(30px)',
+              transition: 'all 0.8s ease-out 0.2s'
             }}
           >
             L'indépendance énergétique{' '}
-            <span className="text-gradient animate-text-shimmer">accessible à tous</span>
+            <span className="text-gradient">accessible à tous</span>
           </h2>
           <p 
             className="text-lg text-muted-foreground max-w-3xl mx-auto"

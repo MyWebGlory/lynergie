@@ -5,12 +5,8 @@ import { Play, Quote, Sun, Leaf, Zap } from 'lucide-react';
 import { SectionFloatingIcons } from './SectionFloatingIcons';
 
 const floatingIcons = [
-  { Icon: Sun, position: 'top-[5%] left-[4%]', delay: '0s', color: 'primary' as const, size: 'lg' as const },
-  { Icon: Play, position: 'top-[15%] right-[6%]', delay: '0.8s', color: 'accent' as const, size: 'md' as const },
-  { Icon: Leaf, position: 'top-[40%] left-[2%]', delay: '1.5s', color: 'accent' as const, size: 'lg' as const },
-  { Icon: Quote, position: 'top-[60%] right-[5%]', delay: '2s', color: 'primary' as const, size: 'md' as const },
-  { Icon: Zap, position: 'bottom-[30%] left-[5%]', delay: '2.5s', color: 'primary' as const, size: 'md' as const },
-  { Icon: Sun, position: 'bottom-[15%] right-[8%]', delay: '3s', color: 'accent' as const, size: 'lg' as const },
+  { Icon: Sun, position: 'top-[10%] left-[5%]', delay: '0s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Leaf, position: 'bottom-[15%] right-[6%]', delay: '2s', color: 'accent' as const, size: 'md' as const },
 ];
 
 export function VideoSection() {
@@ -20,11 +16,11 @@ export function VideoSection() {
   return (
     <section 
       ref={ref} 
-      className="relative py-24 md:py-32 overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.15) 50%, hsl(var(--background)) 100%)' }}
+      className="relative py-16 md:py-20 overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.1) 50%, hsl(var(--background)) 100%)' }}
     >
       {/* Floating icons */}
-      <SectionFloatingIcons icons={floatingIcons} opacity={0.5} />
+      <SectionFloatingIcons icons={floatingIcons} opacity={0.25} />
 
       {/* Video background with parallax */}
       <div 
