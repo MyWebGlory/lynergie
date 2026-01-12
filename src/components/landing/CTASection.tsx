@@ -41,9 +41,11 @@ export function CTASection() {
         <div className="max-w-4xl mx-auto text-center" style={{ perspective: '1000px' }}>
           {/* FOMO Badge */}
           <div 
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-destructive/10 border border-destructive/20 mb-8 opacity-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-destructive/10 border border-destructive/20 mb-8"
             style={{ 
-              animation: isVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'rotateX(0) translateY(0)' : 'rotateX(20deg) translateY(20px)',
+              transition: 'all 0.8s ease-out 0.1s'
             }}
           >
             <Zap className="w-4 h-4 text-destructive animate-pulse" />
@@ -54,9 +56,11 @@ export function CTASection() {
 
           {/* Main heading */}
           <h2 
-            className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 text-shadow-lg opacity-0"
+            className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 text-shadow-lg"
             style={{ 
-              animation: isVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
+              transition: 'all 1s ease-out 0.2s'
             }}
           >
             Prêt à réduire vos factures de{' '}
@@ -65,9 +69,11 @@ export function CTASection() {
 
           {/* Subtitle */}
           <p 
-            className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto opacity-0"
+            className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
             style={{ 
-              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+              transition: 'all 0.8s ease-out 0.4s'
             }}
           >
             Appelez maintenant pour une estimation gratuite et personnalisée. 
@@ -76,9 +82,11 @@ export function CTASection() {
 
           {/* CTA Button - XXL */}
           <div 
-            className="mb-10 opacity-0"
+            className="mb-10"
             style={{ 
-              animation: isVisible ? 'scale-in 0.8s ease-out 0.5s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'scale(1)' : 'scale(0.9)',
+              transition: 'all 0.8s ease-out 0.5s'
             }}
           >
             <Button
@@ -104,9 +112,11 @@ export function CTASection() {
 
           {/* Trust indicators */}
           <div 
-            className="flex flex-wrap justify-center gap-6 md:gap-10 mb-10 opacity-0"
+            className="flex flex-wrap justify-center gap-6 md:gap-10 mb-10"
             style={{ 
-              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.6s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+              transition: 'all 0.8s ease-out 0.6s'
             }}
           >
             <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
@@ -125,9 +135,11 @@ export function CTASection() {
 
           {/* Availability */}
           <div 
-            className="inline-flex items-center gap-3 px-6 py-3 rounded-full glass opacity-0"
+            className="inline-flex items-center gap-3 px-6 py-3 rounded-full glass"
             style={{ 
-              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.7s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+              transition: 'all 0.8s ease-out 0.7s'
             }}
           >
             <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
@@ -138,9 +150,11 @@ export function CTASection() {
 
           {/* Savings visualization */}
           <div 
-            className="mt-12 p-6 rounded-3xl glass max-w-md mx-auto opacity-0"
+            className="mt-12 p-6 rounded-3xl glass max-w-md mx-auto"
             style={{ 
-              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.8s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+              transition: 'all 0.8s ease-out 0.8s'
             }}
           >
             <div className="flex items-center justify-between mb-4">

@@ -70,27 +70,33 @@ export function AboutSection() {
           style={{ perspective: '1000px' }}
         >
           <span 
-            className="inline-flex items-center px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4 opacity-0"
+            className="inline-flex items-center px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4"
             style={{ 
-              animation: isVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'rotateX(0) translateY(0)' : 'rotateX(20deg) translateY(20px)',
+              transition: 'all 0.8s ease-out 0.1s'
             }}
           >
             <Leaf className="w-4 h-4 mr-2" />
             Pourquoi nous choisir
           </span>
           <h2 
-            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6 text-shadow opacity-0"
+            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6 text-shadow"
             style={{ 
-              animation: isVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
+              transition: 'all 1s ease-out 0.2s'
             }}
           >
             L'indépendance énergétique{' '}
             <span className="text-gradient animate-text-shimmer">accessible à tous</span>
           </h2>
           <p 
-            className="text-lg text-muted-foreground max-w-3xl mx-auto opacity-0"
+            className="text-lg text-muted-foreground max-w-3xl mx-auto"
             style={{ 
-              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+              transition: 'all 0.8s ease-out 0.4s'
             }}
           >
             Votre bien-être, la réduction de votre empreinte carbone et de vos dépenses sont nos priorités incontournables.
@@ -102,10 +108,11 @@ export function AboutSection() {
           {benefits.map((benefit, index) => (
             <div
               key={benefit.title}
-              className="opacity-0"
               style={{ 
                 perspective: '1000px',
-                animation: isVisible ? `slide-up-fade 0.8s ease-out ${0.3 + index * 0.1}s forwards` : 'none' 
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0) rotateX(0)' : 'translateY(40px) rotateX(15deg)',
+                transition: `all 0.8s ease-out ${0.3 + index * 0.1}s`
               }}
             >
               <div className="group relative rounded-2xl p-8 glass hover-lift h-full">
@@ -127,9 +134,11 @@ export function AboutSection() {
 
         {/* CTA */}
         <div 
-          className="text-center opacity-0"
+          className="text-center"
           style={{ 
-            animation: isVisible ? 'scale-in 0.8s ease-out 0.8s forwards' : 'none' 
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'scale(1)' : 'scale(0.9)',
+            transition: 'all 0.8s ease-out 0.8s'
           }}
         >
           <Button

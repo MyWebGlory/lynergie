@@ -66,12 +66,14 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
   return (
     <div
       ref={ref}
-      className="group opacity-0"
+      className="group"
       style={{ 
         perspective: '1000px',
-        animation: isVisible 
-          ? `${isEven ? 'fade-in-left' : 'fade-in-right'} 0.8s ease-out ${index * 0.15}s forwards` 
-          : 'none'
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible 
+          ? 'translateX(0) rotateY(0)' 
+          : `translateX(${isEven ? '-50px' : '50px'}) rotateY(${isEven ? '10deg' : '-10deg'})`,
+        transition: `all 0.8s ease-out ${index * 0.15}s`
       }}
     >
       <div 
@@ -156,26 +158,32 @@ export function ServicesSection() {
           style={{ perspective: '1000px' }}
         >
           <span 
-            className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4 opacity-0"
+            className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4"
             style={{ 
-              animation: isSectionVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'rotateX(0) translateY(0)' : 'rotateX(20deg) translateY(20px)',
+              transition: 'all 0.8s ease-out 0.1s'
             }}
           >
             Nos Solutions
           </span>
           <h2 
-            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow opacity-0"
+            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow"
             style={{ 
-              animation: isSectionVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
+              transition: 'all 1s ease-out 0.2s'
             }}
           >
             Votre transition énergétique{' '}
             <span className="text-gradient animate-text-shimmer">sur mesure</span>
           </h2>
           <p 
-            className="text-lg text-muted-foreground max-w-2xl mx-auto opacity-0"
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
             style={{ 
-              animation: isSectionVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'translateY(0)' : 'translateY(30px)',
+              transition: 'all 0.8s ease-out 0.4s'
             }}
           >
             Des solutions adaptées à vos besoins, installées par des experts certifiés RGE

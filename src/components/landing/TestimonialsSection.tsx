@@ -48,16 +48,17 @@ const floatingIcons = [
   { Icon: Leaf, position: 'bottom-[35%] left-[5%]', delay: '3.5s', color: 'accent' as const },
 ];
 
-function ReviewCard({ review, index }: { review: typeof reviews[0]; index: number }) {
+function ReviewCard({ review, index, isSectionVisible }: { review: typeof reviews[0]; index: number; isSectionVisible: boolean }) {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2 });
 
   return (
     <div
       ref={ref}
-      className="opacity-0"
       style={{ 
         perspective: '1000px',
-        animation: isVisible ? `slide-up-fade 0.8s ease-out ${index * 0.1}s forwards` : 'none' 
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0) rotateX(0)' : 'translateY(40px) rotateX(15deg)',
+        transition: `all 0.8s ease-out ${index * 0.1}s`
       }}
     >
       <div className="h-full p-6 rounded-2xl glass hover-lift group">
@@ -84,7 +85,11 @@ function ReviewCard({ review, index }: { review: typeof reviews[0]; index: numbe
             <Star 
               key={i} 
               className="w-4 h-4 fill-primary text-primary"
-              style={{ animation: isVisible ? `scale-in 0.3s ease-out ${0.3 + i * 0.1}s forwards` : 'none' }}
+              style={{ 
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'scale(1)' : 'scale(0)',
+                transition: `all 0.3s ease-out ${0.3 + i * 0.1}s`
+              }}
             />
           ))}
         </div>
@@ -124,26 +129,32 @@ export function TestimonialsSection() {
           style={{ perspective: '1000px' }}
         >
           <span 
-            className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4 opacity-0"
+            className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4"
             style={{ 
-              animation: isSectionVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'rotateX(0) translateY(0)' : 'rotateX(20deg) translateY(20px)',
+              transition: 'all 0.8s ease-out 0.1s'
             }}
           >
             Témoignages
           </span>
           <h2 
-            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow opacity-0"
+            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow"
             style={{ 
-              animation: isSectionVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'rotateX(0) translateY(0) skewX(0)' : 'rotateX(25deg) translateY(40px) skewX(-5deg)',
+              transition: 'all 1s ease-out 0.2s'
             }}
           >
             Ils nous font{' '}
             <span className="text-gradient animate-text-shimmer">confiance</span>
           </h2>
           <p 
-            className="text-lg text-muted-foreground max-w-2xl mx-auto opacity-0"
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
             style={{ 
-              animation: isSectionVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'translateY(0)' : 'translateY(30px)',
+              transition: 'all 0.8s ease-out 0.4s'
             }}
           >
             Découvrez les retours de nos clients satisfaits à travers la région
@@ -153,9 +164,11 @@ export function TestimonialsSection() {
         {/* Video testimonials */}
         <div className="mb-16">
           <div 
-            className="flex items-center justify-center gap-2 mb-8 opacity-0"
+            className="flex items-center justify-center gap-2 mb-8"
             style={{ 
-              animation: isSectionVisible ? 'fade-in-up 0.6s ease-out 0.3s forwards' : 'none' 
+              opacity: isSectionVisible ? 1 : 0,
+              transform: isSectionVisible ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.6s ease-out 0.3s'
             }}
           >
             <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
@@ -166,10 +179,11 @@ export function TestimonialsSection() {
             {videoTestimonials.map((video, index) => (
               <div 
                 key={video.id}
-                className="opacity-0"
                 style={{ 
                   perspective: '1000px',
-                  animation: isSectionVisible ? `slide-up-fade 0.8s ease-out ${0.4 + index * 0.15}s forwards` : 'none' 
+                  opacity: isSectionVisible ? 1 : 0,
+                  transform: isSectionVisible ? 'translateY(0) rotateX(0)' : 'translateY(40px) rotateX(15deg)',
+                  transition: `all 0.8s ease-out ${0.4 + index * 0.15}s`
                 }}
               >
                 <div className="rounded-2xl overflow-hidden glass p-2 hover-lift">
@@ -184,9 +198,11 @@ export function TestimonialsSection() {
 
         {/* Google reviews badge */}
         <div 
-          className="flex justify-center mb-8 opacity-0"
+          className="flex justify-center mb-8"
           style={{ 
-            animation: isSectionVisible ? 'scale-in 0.6s ease-out 0.7s forwards' : 'none' 
+            opacity: isSectionVisible ? 1 : 0,
+            transform: isSectionVisible ? 'scale(1)' : 'scale(0.9)',
+            transition: 'all 0.6s ease-out 0.7s'
           }}
         >
           <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full glass">
@@ -205,7 +221,7 @@ export function TestimonialsSection() {
         {/* Written reviews grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {reviews.map((review, index) => (
-            <ReviewCard key={review.name} review={review} index={index} />
+            <ReviewCard key={review.name} review={review} index={index} isSectionVisible={isSectionVisible} />
           ))}
         </div>
       </div>
