@@ -1,143 +1,172 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { Phone, MapPin, Calculator, FileText, Wrench, CheckCircle, BarChart3 } from 'lucide-react';
+import { useParallax } from '@/hooks/useParallax';
+import { Phone, Search, FileText, ClipboardCheck, Wrench, Shield, Check } from 'lucide-react';
 
 const steps = [
   {
-    icon: Phone,
-    number: 1,
+    number: '01',
     title: 'Prise de contact',
-    description: 'Appelez-nous pour discuter de votre projet. Nous répondons en moins de 2 heures.',
-    color: 'from-blue-500 to-cyan-600',
+    description: 'Appelez-nous ou remplissez notre formulaire. Nous vous recontactons sous 2 heures.',
+    Icon: Phone,
   },
   {
-    icon: MapPin,
-    number: 2,
+    number: '02',
     title: 'Visite technique',
-    description: 'Un expert se déplace chez vous pour évaluer vos besoins et les spécificités de votre installation.',
-    color: 'from-green-500 to-emerald-600',
+    description: 'Un expert se déplace gratuitement chez vous pour étudier votre projet.',
+    Icon: Search,
   },
   {
-    icon: Calculator,
-    number: 3,
+    number: '03',
     title: 'Étude personnalisée',
-    description: 'Nous calculons votre rentabilité et préparons un devis détaillé et transparent.',
-    color: 'from-amber-500 to-orange-600',
+    description: 'Nous concevons une solution sur mesure adaptée à vos besoins et votre budget.',
+    Icon: FileText,
   },
   {
-    icon: FileText,
-    number: 4,
-    title: 'Démarches administratives',
-    description: 'Nous gérons toutes les formalités : mairie, Consuel, demandes d\'aides...',
-    color: 'from-purple-500 to-violet-600',
+    number: '04',
+    title: 'Accompagnement administratif',
+    description: 'Nous gérons toutes les démarches : aides, subventions, autorisations.',
+    Icon: ClipboardCheck,
   },
   {
-    icon: Wrench,
-    number: 5,
+    number: '05',
     title: 'Installation',
-    description: 'Nos artisans certifiés RGE réalisent l\'installation dans les règles de l\'art.',
-    color: 'from-rose-500 to-pink-600',
+    description: 'Nos équipes certifiées RGE réalisent l\'installation dans les règles de l\'art.',
+    Icon: Wrench,
   },
   {
-    icon: BarChart3,
-    number: 6,
+    number: '06',
     title: 'Suivi et garantie',
-    description: 'Suivez vos performances en temps réel et bénéficiez de notre garantie complète.',
-    color: 'from-secondary to-orange-600',
+    description: 'Maintenance, garanties étendues et support technique à vie.',
+    Icon: Shield,
   },
 ];
 
-export function ProcessSection() {
-  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
+function ProcessStep({ step, index, isLast }: { step: typeof steps[0]; index: number; isLast: boolean }) {
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.3 });
 
   return (
-    <section id="process" className="py-24 lg:py-32 bg-card relative overflow-hidden" ref={ref}>
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-background to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-background to-transparent" />
-      </div>
+    <div
+      ref={ref}
+      className={`relative animate-on-scroll ${isVisible ? 'visible' : ''}`}
+      style={{ transitionDelay: `${index * 0.15}s` }}
+    >
+      <div className="flex gap-6">
+        {/* Timeline */}
+        <div className="flex flex-col items-center">
+          {/* Step circle */}
+          <div 
+            className={`relative z-10 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 ${
+              isVisible 
+                ? 'bg-primary glow-primary' 
+                : 'bg-secondary'
+            }`}
+          >
+            <step.Icon className={`w-7 h-7 ${isVisible ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
+            
+            {/* Completion check */}
+            {isVisible && (
+              <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-accent flex items-center justify-center animate-scale-in">
+                <Check className="w-3 h-3 text-accent-foreground" />
+              </div>
+            )}
+          </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <span className="inline-flex items-center gap-2 text-primary font-semibold text-sm uppercase tracking-widest mb-4 bg-primary/10 px-4 py-2 rounded-full">
-            <CheckCircle className="w-4 h-4" />
-            Notre Processus
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6">
-            Du premier appel à <span className="text-primary">l'installation</span>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Un accompagnement clé en main, transparent et sans surprise à chaque étape.
-          </p>
+          {/* Connecting line */}
+          {!isLast && (
+            <div className="relative w-0.5 flex-1 min-h-[80px] bg-border mt-4">
+              <div 
+                className="absolute inset-0 bg-gradient-to-b from-primary to-accent origin-top transition-transform duration-1000"
+                style={{ 
+                  transform: isVisible ? 'scaleY(1)' : 'scaleY(0)',
+                  transitionDelay: `${index * 0.15 + 0.3}s`
+                }}
+              />
+            </div>
+          )}
         </div>
 
-        {/* Timeline */}
-        <div className="relative max-w-5xl mx-auto">
-          {/* Central Line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-secondary to-primary hidden lg:block" style={{ transform: 'translateX(-50%)' }} />
+        {/* Content */}
+        <div className="flex-1 pb-12">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-primary font-mono text-sm font-bold">{step.number}</span>
+            <div className="h-px flex-1 bg-gradient-to-r from-primary/50 to-transparent max-w-[100px]" />
+          </div>
+          
+          <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3">
+            {step.title}
+          </h3>
+          
+          <p className="text-muted-foreground leading-relaxed max-w-md">
+            {step.description}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-          {/* Steps */}
-          <div className="space-y-12 lg:space-y-0">
-            {steps.map((step, index) => {
-              const isLeft = index % 2 === 0;
-              return (
-                <div
-                  key={step.title}
-                  className={`relative lg:flex items-center ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}
-                >
-                  {/* Content */}
-                  <div className={`lg:w-1/2 ${isLeft ? 'lg:pr-16 lg:text-right' : 'lg:pl-16'}`}>
-                    <div
-                      className={`group bg-background rounded-2xl p-6 border border-border/50 hover:border-primary/30 shadow-lg hover:shadow-xl transition-all duration-500 ${
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                      }`}
-                      style={{ transitionDelay: `${index * 150}ms` }}
-                    >
-                      {/* Mobile Icon */}
-                      <div className={`lg:hidden w-14 h-14 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-4 shadow-lg`}>
-                        <step.icon className="w-7 h-7 text-white" />
-                      </div>
-                      
-                      <div className={`flex items-center gap-3 mb-3 ${isLeft ? 'lg:justify-end' : ''}`}>
-                        <span className={`text-sm font-bold bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}>
-                          Étape {step.number}
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                        {step.title}
-                      </h3>
-                      <p className="text-muted-foreground">
-                        {step.description}
-                      </p>
-                    </div>
-                  </div>
+export function ProcessSection() {
+  const [sectionRef, isSectionVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const parallaxOffset = useParallax(0.1);
 
-                  {/* Center Icon (Desktop) */}
-                  <div
-                    className={`hidden lg:flex absolute left-1/2 w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} items-center justify-center shadow-xl transition-all duration-500 hover:scale-110 ${
-                      isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
-                    }`}
-                    style={{ 
-                      transform: 'translateX(-50%)',
-                      transitionDelay: `${index * 150}ms`
-                    }}
-                  >
-                    <step.icon className="w-8 h-8 text-white" />
-                    {/* Number badge */}
-                    <div className="absolute -top-2 -right-2 w-7 h-7 bg-background border-2 border-current rounded-full flex items-center justify-center text-sm font-bold" style={{ borderColor: 'hsl(var(--primary))' }}>
-                      {step.number}
-                    </div>
-                  </div>
+  return (
+    <section ref={sectionRef} id="process" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Parallax background */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{ transform: `translateY(${parallaxOffset}px)` }}
+      >
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
+      </div>
 
-                  {/* Empty space for alternating layout */}
-                  <div className="hidden lg:block lg:w-1/2" />
+      <div className="relative z-10 container mx-auto px-4">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left: Header - Sticky */}
+          <div className="lg:sticky lg:top-32">
+            <div className={`animate-on-scroll ${isSectionVisible ? 'visible' : ''}`}>
+              <span className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4">
+                Notre Processus
+              </span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6 text-shadow">
+                Un accompagnement{' '}
+                <span className="text-gradient">de A à Z</span>
+              </h2>
+              <p className="text-lg text-muted-foreground mb-8">
+                De votre premier appel à la mise en service, nous gérons tout. 
+                Concentrez-vous sur les économies, on s'occupe du reste.
+              </p>
+
+              {/* Quick stats */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl glass">
+                  <div className="text-2xl font-bold text-primary mb-1">48h</div>
+                  <div className="text-sm text-muted-foreground">Délai d'étude</div>
                 </div>
-              );
-            })}
+                <div className="p-4 rounded-2xl glass">
+                  <div className="text-2xl font-bold text-accent mb-1">100%</div>
+                  <div className="text-sm text-muted-foreground">Aides gérées</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Timeline */}
+          <div>
+            {steps.map((step, index) => (
+              <ProcessStep 
+                key={step.number} 
+                step={step} 
+                index={index}
+                isLast={index === steps.length - 1}
+              />
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Section divider */}
+      <div className="absolute bottom-0 left-0 right-0 section-divider" />
     </section>
   );
 }

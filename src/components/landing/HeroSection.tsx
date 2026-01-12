@@ -1,112 +1,128 @@
-import { Phone, ChevronDown, Star, Shield, Sparkles } from 'lucide-react';
+import { Phone, Star, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AnimatedGradient } from './AnimatedGradient';
 import { FloatingElements } from './FloatingElements';
+import { useParallax } from '@/hooks/useParallax';
 
 const services = [
   'Panneaux Solaires',
   'Pompe à Chaleur',
   'Climatisation',
-  'Bornes de Recharge',
+  'Borne de Recharge',
 ];
 
 export function HeroSection() {
+  const parallaxOffset = useParallax(0.3);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Background */}
-      <AnimatedGradient />
+      {/* Animated gradient background with parallax */}
+      <div 
+        className="absolute inset-0"
+        style={{ transform: `translateY(${parallaxOffset}px)` }}
+      >
+        <AnimatedGradient />
+      </div>
 
-      {/* Floating Elements with Parallax */}
+      {/* Floating elements - behind content */}
       <FloatingElements />
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 text-center pt-20">
-        {/* Trust Badge */}
-        <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-5 py-2.5 mb-8 animate-fade-in shadow-2xl">
-          <div className="flex items-center gap-1">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-secondary text-secondary" />
+      {/* Main content - above everything */}
+      <div className="relative z-10 container mx-auto px-4 py-32 md:py-40">
+        <div className="max-w-5xl mx-auto text-center">
+          {/* Trust badge */}
+          <div 
+            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass mb-8 animate-fade-in-up"
+            style={{ animationDelay: '0.1s' }}
+          >
+            <div className="flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+              ))}
+            </div>
+            <span className="text-foreground/90 font-medium text-sm">5.0 sur Google</span>
+            <div className="w-px h-4 bg-border" />
+            <div className="flex items-center gap-1.5">
+              <Shield className="w-4 h-4 text-accent" />
+              <span className="text-foreground/90 font-medium text-sm">RGE Certifié</span>
+            </div>
+          </div>
+
+          {/* Main headline */}
+          <h1 className="mb-6">
+            <span 
+              className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-foreground text-shadow-lg leading-tight animate-fade-in-up"
+              style={{ animationDelay: '0.2s' }}
+            >
+              L'énergie de demain,
+            </span>
+            <span 
+              className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-gradient animate-gradient-x leading-tight animate-fade-in-up"
+              style={{ animationDelay: '0.3s' }}
+            >
+              chez vous aujourd'hui
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p 
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-shadow animate-fade-in-up"
+            style={{ animationDelay: '0.4s' }}
+          >
+            Experts en transition énergétique depuis plus de 10 ans. 
+            Réduisez vos factures jusqu'à 70% avec nos solutions sur mesure.
+          </p>
+
+          {/* Services pills */}
+          <div 
+            className="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in-up"
+            style={{ animationDelay: '0.5s' }}
+          >
+            {services.map((service) => (
+              <span
+                key={service}
+                className="px-4 py-2 rounded-full text-sm font-medium glass text-foreground/90 hover:bg-primary/20 hover:text-primary transition-all duration-300 cursor-default"
+              >
+                {service}
+              </span>
             ))}
           </div>
-          <span className="text-white/90 text-sm font-medium">5.0 sur Google</span>
-          <div className="w-px h-4 bg-white/30" />
-          <div className="flex items-center gap-1.5">
-            <Shield className="w-4 h-4 text-accent" />
-            <span className="text-white/90 text-sm font-medium">RGE Certifié</span>
-          </div>
-        </div>
 
-        {/* Main Title */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white mb-6 leading-[1.1] tracking-tight">
-          <span className="block animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            L'énergie de demain
-          </span>
-          <span 
-            className="block bg-gradient-to-r from-secondary via-yellow-300 to-secondary bg-clip-text text-transparent animate-fade-in bg-[length:200%_auto] animate-gradient-x"
-            style={{ animationDelay: '0.2s' }}
+          {/* CTA Button */}
+          <div 
+            className="animate-fade-in-up"
+            style={{ animationDelay: '0.6s' }}
           >
-            chez vous aujourd'hui
-          </span>
-        </h1>
-
-        {/* Subtitle */}
-        <p 
-          className="text-lg md:text-xl lg:text-2xl text-white/70 mb-8 max-w-2xl mx-auto animate-fade-in font-light"
-          style={{ animationDelay: '0.3s' }}
-        >
-          Experts en transition énergétique depuis +10 ans en Auvergne-Rhône-Alpes
-        </p>
-
-        {/* Services Pills */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          {services.map((service, index) => (
-            <span
-              key={service}
-              className="group relative bg-white/5 backdrop-blur-sm border border-white/10 text-white/90 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-white/15 hover:border-white/30 transition-all duration-300 cursor-default overflow-hidden"
-            >
-              <span className="relative z-10">{service}</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-secondary/0 via-secondary/20 to-secondary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-x-full group-hover:translate-x-full" style={{ transition: 'transform 0.6s, opacity 0.3s' }} />
-            </span>
-          ))}
-        </div>
-
-        {/* CTA Button */}
-        <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.5s' }}>
-          <a href="tel:0623666839">
             <Button
+              asChild
               size="lg"
-              className="relative bg-secondary hover:bg-secondary/90 text-secondary-foreground text-lg md:text-xl font-bold gap-4 px-10 py-8 rounded-2xl shadow-2xl shadow-secondary/30 hover:shadow-secondary/50 transition-all duration-300 hover:scale-105 group overflow-hidden"
+              className="relative overflow-hidden bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-10 py-7 rounded-full animate-glow-pulse transition-transform duration-300 hover:scale-105 group"
             >
-              {/* Shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              
-              <Phone className="w-6 h-6 md:w-7 md:h-7 relative z-10" />
-              <span className="relative z-10">Appeler maintenant</span>
-              <span className="hidden sm:inline relative z-10 text-secondary-foreground/80">— 06 23 66 68 39</span>
+              <a href="tel:0623666839" className="flex items-center gap-3">
+                <Phone className="w-5 h-5" />
+                <span>Appeler : 06 23 66 68 39</span>
+                {/* Shine effect */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              </a>
             </Button>
-          </a>
-          
-          <div className="flex items-center justify-center gap-2 text-white/50 text-sm">
-            <Sparkles className="w-4 h-4" />
-            <span>Devis gratuit • Réponse sous 2h</span>
+
+            <p className="mt-4 text-sm text-muted-foreground">
+              Réponse en moins de 2h • Devis gratuit • Sans engagement
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <a
-        href="#stats"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-white/60 hover:text-white/80 transition-colors group"
-        aria-label="Découvrir"
-      >
-        <span className="text-xs font-medium tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">Découvrir</span>
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-1.5">
-          <div className="w-1.5 h-3 bg-white/60 rounded-full animate-scroll-indicator" />
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in-up z-10" style={{ animationDelay: '1s' }}>
+        <span className="text-xs text-muted-foreground font-medium tracking-widest uppercase">Découvrir</span>
+        <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-primary animate-scroll-indicator" />
         </div>
-      </a>
+      </div>
 
-      {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-[5]" />
     </section>
   );
 }
