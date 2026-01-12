@@ -1,8 +1,9 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useParallax } from '@/hooks/useParallax';
-import { Zap, Leaf, TrendingUp, PiggyBank, Home, ShieldCheck } from 'lucide-react';
+import { Zap, Leaf, TrendingUp, PiggyBank, Home, ShieldCheck, Sun, Wind } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Phone } from 'lucide-react';
+import { SectionFloatingIcons } from './SectionFloatingIcons';
 
 const benefits = [
   {
@@ -37,33 +38,61 @@ const benefits = [
   },
 ];
 
+const floatingIcons = [
+  { Icon: Sun, position: 'top-[8%] left-[5%]', delay: '0s', color: 'primary' as const },
+  { Icon: Leaf, position: 'top-[25%] right-[5%]', delay: '1s', color: 'accent' as const },
+  { Icon: Wind, position: 'bottom-[30%] left-[3%]', delay: '2s', color: 'accent' as const },
+  { Icon: Zap, position: 'bottom-[15%] right-[8%]', delay: '3s', color: 'primary' as const },
+];
+
 export function AboutSection() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
   const parallaxOffset = useParallax(0.1);
 
   return (
     <section id="about" className="relative py-24 lg:py-32 overflow-hidden" ref={ref}>
+      {/* Floating icons */}
+      <SectionFloatingIcons icons={floatingIcons} />
+
       {/* Parallax background */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
-        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/5 rounded-full blur-3xl animate-orb-1" />
+        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-accent/5 rounded-full blur-3xl animate-orb-2" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className={`text-center mb-16 animate-on-scroll ${isVisible ? 'visible' : ''}`}>
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4">
-            <Leaf className="w-4 h-4 inline mr-2" />
+        {/* Section Header with tilt */}
+        <div 
+          className="text-center mb-16"
+          style={{ perspective: '1000px' }}
+        >
+          <span 
+            className="inline-flex items-center px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4 opacity-0"
+            style={{ 
+              animation: isVisible ? 'tilt-in 0.8s ease-out 0.1s forwards' : 'none' 
+            }}
+          >
+            <Leaf className="w-4 h-4 mr-2" />
             Pourquoi nous choisir
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6 text-shadow">
+          <h2 
+            className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6 text-shadow opacity-0"
+            style={{ 
+              animation: isVisible ? 'title-reveal 1s ease-out 0.2s forwards' : 'none' 
+            }}
+          >
             L'indépendance énergétique{' '}
-            <span className="text-gradient">accessible à tous</span>
+            <span className="text-gradient animate-text-shimmer">accessible à tous</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          <p 
+            className="text-lg text-muted-foreground max-w-3xl mx-auto opacity-0"
+            style={{ 
+              animation: isVisible ? 'slide-up-fade 0.8s ease-out 0.4s forwards' : 'none' 
+            }}
+          >
             Votre bien-être, la réduction de votre empreinte carbone et de vos dépenses sont nos priorités incontournables.
           </p>
         </div>
@@ -73,16 +102,19 @@ export function AboutSection() {
           {benefits.map((benefit, index) => (
             <div
               key={benefit.title}
-              className={`animate-on-scroll-scale ${isVisible ? 'visible' : ''}`}
-              style={{ transitionDelay: `${index * 0.1}s` }}
+              className="opacity-0"
+              style={{ 
+                perspective: '1000px',
+                animation: isVisible ? `slide-up-fade 0.8s ease-out ${0.3 + index * 0.1}s forwards` : 'none' 
+              }}
             >
               <div className="group relative rounded-2xl p-8 glass hover-lift h-full">
                 {/* Icon */}
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
                   <benefit.icon className="w-7 h-7 text-primary-foreground" />
                 </div>
 
-                <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+                <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-gradient transition-all duration-300">
                   {benefit.title}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
@@ -94,14 +126,19 @@ export function AboutSection() {
         </div>
 
         {/* CTA */}
-        <div className={`text-center animate-on-scroll ${isVisible ? 'visible' : ''}`} style={{ transitionDelay: '0.6s' }}>
+        <div 
+          className="text-center opacity-0"
+          style={{ 
+            animation: isVisible ? 'scale-in 0.8s ease-out 0.8s forwards' : 'none' 
+          }}
+        >
           <Button
             asChild
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-bold gap-3 px-10 py-7 rounded-full glow-primary hover:scale-105 transition-all duration-300"
           >
             <a href="tel:0623666839">
-              <Phone className="w-6 h-6" />
+              <Phone className="w-6 h-6 animate-bounce-subtle" />
               Obtenir mon estimation gratuite
             </a>
           </Button>
