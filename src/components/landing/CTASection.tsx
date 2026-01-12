@@ -4,19 +4,27 @@ import { Button } from '@/components/ui/button';
 import { SectionFloatingIcons } from './SectionFloatingIcons';
 
 const floatingIcons = [
-  { Icon: Sun, position: 'top-[10%] left-[5%]', delay: '0s', color: 'primary' as const },
-  { Icon: Leaf, position: 'top-[20%] right-[8%]', delay: '1.5s', color: 'accent' as const },
-  { Icon: Home, position: 'bottom-[25%] left-[3%]', delay: '2.5s', color: 'accent' as const },
-  { Icon: Zap, position: 'bottom-[15%] right-[5%]', delay: '3s', color: 'primary' as const },
+  { Icon: Sun, position: 'top-[5%] left-[3%]', delay: '0s', color: 'primary' as const, size: 'lg' as const },
+  { Icon: Sparkles, position: 'top-[10%] right-[5%]', delay: '0.8s', color: 'accent' as const, size: 'md' as const },
+  { Icon: Leaf, position: 'top-[35%] left-[4%]', delay: '1.5s', color: 'accent' as const, size: 'lg' as const },
+  { Icon: Zap, position: 'top-[50%] right-[3%]', delay: '2s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Home, position: 'bottom-[40%] left-[5%]', delay: '2.5s', color: 'primary' as const, size: 'md' as const },
+  { Icon: TrendingDown, position: 'bottom-[25%] right-[6%]', delay: '3s', color: 'accent' as const, size: 'lg' as const },
+  { Icon: Sun, position: 'bottom-[10%] left-[8%]', delay: '3.5s', color: 'accent' as const, size: 'md' as const },
 ];
 
 export function CTASection() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2 });
 
   return (
-    <section ref={ref} id="contact" className="relative py-24 md:py-32 overflow-hidden">
+    <section 
+      ref={ref} 
+      id="contact" 
+      className="relative py-24 md:py-32 overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.2) 40%, hsl(var(--primary)/0.05) 60%, hsl(var(--background)) 100%)' }}
+    >
       {/* Floating icons */}
-      <SectionFloatingIcons icons={floatingIcons} />
+      <SectionFloatingIcons icons={floatingIcons} opacity={0.5} />
 
       {/* Animated background */}
       <div className="absolute inset-0">

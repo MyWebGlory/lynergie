@@ -44,10 +44,12 @@ const stats = [
 ];
 
 const floatingIcons = [
-  { Icon: Sun, position: 'top-[5%] right-[10%]', delay: '0s', color: 'primary' as const },
-  { Icon: Leaf, position: 'top-[40%] left-[3%]', delay: '1.5s', color: 'accent' as const },
-  { Icon: Zap, position: 'bottom-[20%] right-[5%]', delay: '3s', color: 'primary' as const },
-  { Icon: Wind, position: 'bottom-[40%] left-[8%]', delay: '2s', color: 'accent' as const },
+  { Icon: Sun, position: 'top-[5%] left-[5%]', delay: '0s', color: 'primary' as const, size: 'lg' as const },
+  { Icon: TrendingUp, position: 'top-[10%] right-[8%]', delay: '1s', color: 'accent' as const, size: 'md' as const },
+  { Icon: Leaf, position: 'top-[40%] left-[3%]', delay: '1.5s', color: 'accent' as const, size: 'lg' as const },
+  { Icon: Home, position: 'top-[55%] right-[4%]', delay: '2s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Zap, position: 'bottom-[25%] left-[6%]', delay: '2.5s', color: 'primary' as const, size: 'md' as const },
+  { Icon: Wind, position: 'bottom-[15%] right-[5%]', delay: '3s', color: 'accent' as const, size: 'lg' as const },
 ];
 
 function StatCard({ stat, index, isSectionVisible }: { stat: typeof stats[0]; index: number; isSectionVisible: boolean }) {
@@ -102,17 +104,28 @@ export function StatsSection() {
   const parallaxOffset = useParallax(0.15);
 
   return (
-    <section ref={sectionRef} id="stats" className="relative py-24 md:py-32 overflow-hidden">
+    <section 
+      ref={sectionRef} 
+      id="stats" 
+      className="relative py-24 md:py-32 overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, hsl(var(--muted)/0.15) 0%, hsl(var(--background)) 30%, hsl(var(--muted)/0.1) 70%, hsl(var(--background)) 100%)' }}
+    >
       {/* Floating icons */}
-      <SectionFloatingIcons icons={floatingIcons} />
+      <SectionFloatingIcons icons={floatingIcons} opacity={0.5} />
 
-      {/* Parallax background elements */}
+      {/* Enhanced gradient orbs */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ transform: `translateY(${parallaxOffset}px)` }}
       >
-        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-orb-1" />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-orb-2" />
+        <div 
+          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-[100px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--primary)/0.1) 0%, transparent 70%)' }}
+        />
+        <div 
+          className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full blur-[80px]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--accent)/0.1) 0%, transparent 70%)' }}
+        />
       </div>
 
       <div className="relative z-10 container mx-auto px-4">
