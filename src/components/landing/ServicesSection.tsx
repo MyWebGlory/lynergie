@@ -1,121 +1,113 @@
-import { useState } from 'react';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useParallax } from '@/hooks/useParallax';
 import { ArrowRight, Sun, Thermometer, Wind, Zap } from 'lucide-react';
-import panneauxSolaires from '@/assets/services/panneaux-solaires.avif';
-import pompeChaleur from '@/assets/services/pompe-chaleur.avif';
-import climatisation from '@/assets/services/climatisation.avif';
-import borneRecharge from '@/assets/services/borne-recharge.avif';
+
+import solarImg from '@/assets/services/panneaux-solaires.avif';
+import heatPumpImg from '@/assets/services/pompe-chaleur.avif';
+import acImg from '@/assets/services/climatisation.avif';
+import evChargerImg from '@/assets/services/borne-recharge.avif';
 
 const services = [
   {
-    icon: Sun,
-    title: 'Produisez votre énergie',
-    subtitle: 'Panneaux Solaires',
-    description: 'Photovoltaïques, Thermiques et Hybrides. Produisez votre électricité et revendez le surplus. Rentabilité garantie sous 7 à 9 ans.',
-    image: panneauxSolaires,
-    gradient: 'from-amber-500 to-orange-600',
-    stats: 'Jusqu\'à 70% d\'économies',
+    id: 'solar',
+    title: 'Panneaux Solaires',
+    subtitle: 'Produisez votre énergie',
+    description: 'Transformez votre toit en centrale électrique. Réduisez vos factures et revendez votre surplus.',
+    image: solarImg,
+    Icon: Sun,
+    stats: "Jusqu'à 70% d'économies",
+    color: 'from-orange-500/20 to-yellow-500/20',
   },
   {
-    icon: Thermometer,
-    title: 'Chauffez sans gaspiller',
-    subtitle: 'Pompe à Chaleur',
-    description: 'Air-air (gainable) et air-eau. Chauffez et rafraîchissez votre maison avec une énergie propre et économique.',
-    image: pompeChaleur,
-    gradient: 'from-blue-500 to-cyan-600',
-    stats: 'COP jusqu\'à 4.5',
+    id: 'heatpump',
+    title: 'Pompe à Chaleur',
+    subtitle: 'Chauffez sans gaspiller',
+    description: 'Chauffage et eau chaude éco-responsables. Confort optimal, impact minimal.',
+    image: heatPumpImg,
+    Icon: Thermometer,
+    stats: 'COP jusqu\'à 5',
+    color: 'from-red-500/20 to-orange-500/20',
   },
   {
-    icon: Wind,
-    title: 'Restez au frais',
-    subtitle: 'Climatisation',
-    description: 'Réversible air-air (gainable). Confort thermique toute l\'année avec des solutions performantes et silencieuses.',
-    image: climatisation,
-    gradient: 'from-sky-500 to-indigo-600',
+    id: 'ac',
+    title: 'Climatisation',
+    subtitle: 'Restez au frais',
+    description: 'Climatisation réversible haute performance. Fraîcheur en été, douceur en hiver.',
+    image: acImg,
+    Icon: Wind,
     stats: 'Classe A+++',
+    color: 'from-blue-500/20 to-cyan-500/20',
   },
   {
-    icon: Zap,
-    title: 'Roulez électrique',
-    subtitle: 'Borne de Recharge',
-    description: 'IRVE pour véhicule électrique. Rechargez votre véhicule électrique à domicile en toute sécurité.',
-    image: borneRecharge,
-    gradient: 'from-green-500 to-emerald-600',
-    stats: 'Jusqu\'à 22kW',
+    id: 'ev',
+    title: 'Borne de Recharge',
+    subtitle: 'Roulez à l\'électrique',
+    description: 'Rechargez votre véhicule électrique chez vous. Rapide, pratique, économique.',
+    image: evChargerImg,
+    Icon: Zap,
+    stats: 'Charge rapide 22kW',
+    color: 'from-green-500/20 to-emerald-500/20',
   },
 ];
 
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2 });
-  const [isHovered, setIsHovered] = useState(false);
-  
+  const isEven = index % 2 === 0;
+
   return (
     <div
       ref={ref}
-      className={`group relative overflow-hidden rounded-3xl transition-all duration-700 cursor-pointer ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-      } ${index === 0 || index === 3 ? 'lg:col-span-2' : ''}`}
-      style={{ transitionDelay: `${index * 150}ms` }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className={`group ${isEven ? 'animate-on-scroll-left' : 'animate-on-scroll-right'} ${isVisible ? 'visible' : ''}`}
+      style={{ transitionDelay: `${index * 0.1}s` }}
     >
-      {/* Image Background */}
-      <div className="absolute inset-0">
-        <img
-          src={service.image}
-          alt={service.subtitle}
-          className={`w-full h-full object-cover transition-transform duration-700 ${
-            isHovered ? 'scale-110' : 'scale-100'
-          }`}
-        />
-        {/* Gradient Overlay */}
-        <div className={`absolute inset-0 bg-gradient-to-t from-foreground via-foreground/60 to-transparent transition-opacity duration-500 ${
-          isHovered ? 'opacity-95' : 'opacity-80'
-        }`} />
-      </div>
-      
-      {/* Content */}
-      <div className="relative h-full min-h-[400px] lg:min-h-[450px] flex flex-col justify-end p-8">
-        {/* Icon Badge */}
-        <div className={`absolute top-6 left-6 w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center shadow-lg transform transition-all duration-500 ${
-          isHovered ? 'scale-110 rotate-3' : ''
-        }`}>
-          <service.icon className="w-7 h-7 text-white" />
+      <div className="relative h-full rounded-3xl overflow-hidden glass hover-lift cursor-pointer">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <img
+            src={service.image}
+            alt={service.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          {/* Gradient overlay */}
+          <div className={`absolute inset-0 bg-gradient-to-t ${service.color} opacity-60`} />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
         </div>
 
-        {/* Stats Badge */}
-        <div className={`absolute top-6 right-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 transition-all duration-500 ${
-          isHovered ? 'bg-white/20' : ''
-        }`}>
-          <span className="text-white text-sm font-semibold">{service.stats}</span>
-        </div>
-        
-        {/* Text Content */}
-        <div className="space-y-4">
-          <div>
-            <span className={`inline-block text-sm font-medium bg-gradient-to-r ${service.gradient} bg-clip-text text-transparent mb-2`}>
-              {service.subtitle}
-            </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-white">
-              {service.title}
-            </h3>
+        {/* Content */}
+        <div className="relative p-8 h-full flex flex-col justify-end min-h-[400px]">
+          {/* Icon badge */}
+          <div className="absolute top-6 right-6">
+            <div className="p-3 rounded-2xl glass group-hover:bg-primary/20 transition-colors duration-300">
+              <service.Icon className="w-6 h-6 text-primary" />
+            </div>
           </div>
+
+          {/* Stats badge */}
+          <div className="inline-flex self-start px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-semibold mb-4 backdrop-blur-sm">
+            {service.stats}
+          </div>
+
+          {/* Title and subtitle */}
+          <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-1 text-shadow group-hover:text-gradient transition-all duration-300">
+            {service.title}
+          </h3>
+          <p className="text-primary font-semibold mb-3">{service.subtitle}</p>
           
-          <p className={`text-white/80 leading-relaxed transition-all duration-500 ${
-            isHovered ? 'opacity-100 max-h-32' : 'opacity-70 max-h-20 overflow-hidden'
-          }`}>
+          {/* Description */}
+          <p className="text-muted-foreground mb-6 line-clamp-2">
             {service.description}
           </p>
-          
-          <a
-            href="#contact"
-            className={`inline-flex items-center gap-2 text-white font-semibold transition-all duration-300 ${
-              isHovered ? 'gap-4' : ''
-            }`}
-          >
-            <span>Demander un devis</span>
-            <ArrowRight className={`w-5 h-5 transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`} />
-          </a>
+
+          {/* CTA */}
+          <div className="flex items-center gap-2 text-primary font-semibold group-hover:gap-4 transition-all duration-300">
+            <span>En savoir plus</span>
+            <ArrowRight className="w-4 h-4" />
+          </div>
+        </div>
+
+        {/* Hover shine effect */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
         </div>
       </div>
     </div>
@@ -123,38 +115,45 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
 }
 
 export function ServicesSection() {
-  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [sectionRef, isSectionVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const parallaxOffset = useParallax(0.1);
 
   return (
-    <section id="services" className="py-24 lg:py-32 bg-background relative overflow-hidden" ref={ref}>
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 -left-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-secondary/10 rounded-full blur-3xl" />
+    <section ref={sectionRef} id="services" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Parallax background */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{ transform: `translateY(${parallaxOffset}px)` }}
+      >
+        <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <span className="inline-flex items-center gap-2 text-primary font-semibold text-sm uppercase tracking-widest mb-4 bg-primary/10 px-4 py-2 rounded-full">
-            <Zap className="w-4 h-4" />
-            Nos Expertises
+      <div className="relative z-10 container mx-auto px-4">
+        {/* Section header */}
+        <div className={`text-center mb-16 animate-on-scroll ${isSectionVisible ? 'visible' : ''}`}>
+          <span className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4">
+            Nos Solutions
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6">
-            4 solutions pour votre <span className="text-primary">indépendance énergétique</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow">
+            Votre transition énergétique{' '}
+            <span className="text-gradient">sur mesure</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Des installations clé en main, certifiées RGE, pour réduire vos factures et votre empreinte carbone.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Des solutions adaptées à vos besoins, installées par des experts certifiés RGE
           </p>
         </div>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Services grid */}
+        <div className="grid md:grid-cols-2 gap-6">
           {services.map((service, index) => (
-            <ServiceCard key={service.title} service={service} index={index} />
+            <ServiceCard key={service.id} service={service} index={index} />
           ))}
         </div>
       </div>
+
+      {/* Section divider */}
+      <div className="absolute bottom-0 left-0 right-0 section-divider" />
     </section>
   );
 }

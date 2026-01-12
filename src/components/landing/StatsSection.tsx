@@ -1,123 +1,131 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useCountUp } from '@/hooks/useCountUp';
-import { Award, Users, Star, Calendar } from 'lucide-react';
+import { useParallax } from '@/hooks/useParallax';
+import { Home, Award, Star, TrendingUp } from 'lucide-react';
 
 const stats = [
-  {
-    icon: Users,
-    value: 500,
-    suffix: '+',
+  { 
+    value: 500, 
+    suffix: '+', 
     label: 'Installations réalisées',
-    description: 'Familles accompagnées vers l\'indépendance énergétique',
+    description: 'Maisons équipées en Auvergne-Rhône-Alpes',
+    Icon: Home,
+    color: 'primary',
     decimals: 0,
   },
-  {
-    icon: Calendar,
-    value: 10,
-    suffix: '+',
-    label: 'Années d\'expertise',
-    description: 'D\'expérience dans le photovoltaïque et les énergies renouvelables',
+  { 
+    value: 10, 
+    suffix: ' ans+', 
+    label: "D'expertise",
+    description: 'Une décennie au service de la transition énergétique',
+    Icon: Award,
+    color: 'accent',
     decimals: 0,
   },
-  {
-    icon: Star,
-    value: 5.0,
-    decimals: 1,
-    suffix: '★',
+  { 
+    value: 5.0, 
+    suffix: '★', 
     label: 'Note Google',
-    description: 'Basée sur plus de 90 avis clients vérifiés',
+    description: 'Satisfaction client maximale vérifiée',
+    Icon: Star,
+    color: 'primary',
+    decimals: 1,
   },
-  {
-    icon: Award,
-    value: 100,
-    suffix: '%',
-    label: 'Certifié RGE',
-    description: 'Qualifications QualiPV & QualiPac reconnues par l\'État',
+  { 
+    value: 70, 
+    suffix: '%', 
+    label: "D'économies",
+    description: 'Réduction moyenne sur les factures énergétiques',
+    Icon: TrendingUp,
+    color: 'accent',
     decimals: 0,
   },
 ];
 
 function StatCard({ stat, index }: { stat: typeof stats[0]; index: number }) {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.3 });
-  const count = useCountUp(stat.value, 0, 2000, isVisible);
+  const count = useCountUp(stat.value, stat.decimals, 2000, isVisible);
+
+  const colorClasses = {
+    primary: 'text-primary border-primary/20 bg-primary/5',
+    accent: 'text-accent border-accent/20 bg-accent/5',
+  };
 
   return (
     <div
       ref={ref}
-      className="group relative"
-      style={{ animationDelay: `${index * 0.1}s` }}
+      className={`animate-on-scroll-scale ${isVisible ? 'visible' : ''}`}
+      style={{ transitionDelay: `${index * 0.15}s` }}
     >
-      {/* Card */}
-      <div className={`relative bg-card rounded-3xl p-8 border border-border/50 shadow-xl transition-all duration-700 hover:shadow-2xl hover:-translate-y-2 overflow-hidden ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      }`}>
-        {/* Gradient overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        
+      <div className="group relative p-8 rounded-3xl glass hover-lift h-full">
         {/* Icon */}
-        <div className="relative mb-6">
-          <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-            <stat.icon className="w-8 h-8 text-primary" />
-          </div>
+        <div className={`inline-flex p-4 rounded-2xl ${colorClasses[stat.color as keyof typeof colorClasses]} mb-6 transition-transform duration-300 group-hover:scale-110`}>
+          <stat.Icon className="w-7 h-7" />
         </div>
 
-        {/* Value */}
-        <div className="relative mb-2">
-          <span className="text-5xl md:text-6xl font-black text-foreground">
-            {stat.decimals ? count.toFixed(stat.decimals) : count}
+        {/* Counter */}
+        <div className="mb-4">
+          <span className={`text-5xl md:text-6xl font-black ${stat.color === 'primary' ? 'text-gradient' : 'text-accent'}`}>
+            {stat.decimals ? count.toFixed(stat.decimals) : Math.round(count)}
           </span>
-          <span className="text-3xl md:text-4xl font-bold text-secondary ml-1">
+          <span className="text-3xl md:text-4xl font-bold text-foreground/80 ml-1">
             {stat.suffix}
           </span>
         </div>
 
         {/* Label */}
-        <h3 className="relative text-xl font-bold text-foreground mb-2">
-          {stat.label}
-        </h3>
-        
-        {/* Description */}
-        <p className="relative text-muted-foreground text-sm">
-          {stat.description}
-        </p>
+        <h3 className="text-xl font-bold text-foreground mb-2">{stat.label}</h3>
+        <p className="text-muted-foreground text-sm">{stat.description}</p>
+
+        {/* Decorative corner */}
+        <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden rounded-tr-3xl">
+          <div className={`absolute -top-10 -right-10 w-20 h-20 ${stat.color === 'primary' ? 'bg-primary/10' : 'bg-accent/10'} rotate-45`} />
+        </div>
       </div>
     </div>
   );
 }
 
 export function StatsSection() {
-  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [sectionRef, isSectionVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const parallaxOffset = useParallax(0.15);
 
   return (
-    <section id="stats" className="py-24 lg:py-32 bg-background relative overflow-hidden" ref={ref}>
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+    <section ref={sectionRef} id="stats" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Parallax background elements */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{ transform: `translateY(${parallaxOffset}px)` }}
+      >
+        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <span className="inline-flex items-center gap-2 text-primary font-semibold text-sm uppercase tracking-widest mb-4 bg-primary/10 px-4 py-2 rounded-full">
-            <Award className="w-4 h-4" />
-            Nos Chiffres
+      <div className="relative z-10 container mx-auto px-4">
+        {/* Section header */}
+        <div className={`text-center mb-16 animate-on-scroll ${isSectionVisible ? 'visible' : ''}`}>
+          <span className="inline-block px-4 py-1.5 rounded-full glass text-primary text-sm font-semibold mb-4">
+            Nos Résultats
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-6">
-            La confiance de <span className="text-primary">+500 familles</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-4 text-shadow">
+            Des chiffres qui{' '}
+            <span className="text-gradient">parlent</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Des résultats concrets qui témoignent de notre engagement envers la qualité et la satisfaction client.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Plus d'une décennie d'excellence au service de votre transition énergétique
           </p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        {/* Stats grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <StatCard key={stat.label} stat={stat} index={index} />
           ))}
         </div>
       </div>
+
+      {/* Section divider */}
+      <div className="absolute bottom-0 left-0 right-0 section-divider" />
     </section>
   );
 }

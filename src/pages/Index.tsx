@@ -1,6 +1,7 @@
 import { Header } from '@/components/landing/Header';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { StatsSection } from '@/components/landing/StatsSection';
+import { VideoSection } from '@/components/landing/VideoSection';
 import { ServicesSection } from '@/components/landing/ServicesSection';
 import { AboutSection } from '@/components/landing/AboutSection';
 import { TestimonialsSection } from '@/components/landing/TestimonialsSection';
@@ -10,17 +11,20 @@ import { Footer } from '@/components/landing/Footer';
 
 const Index = () => {
   return (
-    <main className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Header />
-      <HeroSection />
-      <StatsSection />
-      <ServicesSection />
-      <AboutSection />
-      <TestimonialsSection />
-      <ProcessSection />
-      <CTASection />
+      <main>
+        <HeroSection />
+        <StatsSection />
+        <VideoSection />
+        <ServicesSection />
+        <ProcessSection />
+        <TestimonialsSection />
+        <AboutSection />
+        <CTASection />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 };
 

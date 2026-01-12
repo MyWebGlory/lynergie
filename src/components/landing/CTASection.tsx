@@ -1,89 +1,136 @@
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { Phone, Clock, AlertTriangle, Sparkles, CheckCircle } from 'lucide-react';
+import { Phone, Clock, FileCheck, Sparkles, Zap, TrendingDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function CTASection() {
-  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.3 });
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2 });
 
   return (
-    <section id="contact" className="py-24 lg:py-32 relative overflow-hidden" ref={ref}>
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-primary/80" />
-      
-      {/* Animated orbs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-1/4 -left-1/4 w-[600px] h-[600px] bg-secondary/30 rounded-full blur-[120px] animate-float" />
-        <div className="absolute -bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-accent/20 rounded-full blur-[100px] animate-float" style={{ animationDelay: '3s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-white/10 rounded-full blur-[80px] animate-float" style={{ animationDelay: '6s' }} />
+    <section ref={ref} id="contact" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0">
+        {/* Gradient orbs */}
+        <div className="absolute top-0 left-1/4 w-[60vw] h-[60vw] bg-primary/20 rounded-full blur-[120px] animate-orb-1" />
+        <div className="absolute bottom-0 right-1/4 w-[50vw] h-[50vw] bg-accent/15 rounded-full blur-[100px] animate-orb-2" />
+        
+        {/* Grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `
+              linear-gradient(hsl(var(--foreground) / 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, hsl(var(--foreground) / 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+          }}
+        />
       </div>
 
-      {/* Grid pattern */}
-      <div 
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px',
-        }}
-      />
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className={`max-w-4xl mx-auto text-center transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <div className="relative z-10 container mx-auto px-4">
+        <div className="max-w-4xl mx-auto text-center">
           {/* FOMO Badge */}
-          <div className="inline-flex items-center gap-2 bg-secondary/20 backdrop-blur-md border border-secondary/30 rounded-full px-5 py-2.5 mb-8 animate-pulse-slow">
-            <AlertTriangle className="w-5 h-5 text-secondary" />
-            <span className="text-white font-semibold">
+          <div 
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-destructive/10 border border-destructive/20 mb-8 animate-on-scroll ${isVisible ? 'visible' : ''}`}
+          >
+            <Zap className="w-4 h-4 text-destructive animate-pulse" />
+            <span className="text-destructive font-semibold text-sm">
               ⚡ Aides de l'État en cours de révision — Profitez-en maintenant !
             </span>
           </div>
 
-          {/* Title */}
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
-            Prêt à réduire vos factures
-            <br />
-            <span className="text-secondary">de 70% ?</span>
+          {/* Main heading */}
+          <h2 
+            className={`text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 text-shadow-lg animate-on-scroll ${isVisible ? 'visible' : ''}`}
+            style={{ transitionDelay: '0.1s' }}
+          >
+            Prêt à réduire vos factures de{' '}
+            <span className="text-gradient">70%</span> ?
           </h2>
-          
-          <p className="text-white/80 text-xl mb-10 max-w-2xl mx-auto">
-            Rejoignez les +500 familles qui ont fait confiance à Lynergie pour leur transition énergétique.
+
+          {/* Subtitle */}
+          <p 
+            className={`text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-on-scroll ${isVisible ? 'visible' : ''}`}
+            style={{ transitionDelay: '0.2s' }}
+          >
+            Appelez maintenant pour une estimation gratuite et personnalisée. 
+            Nos experts sont disponibles pour répondre à toutes vos questions.
           </p>
 
-          {/* CTA Button */}
-          <a href="tel:0623666839">
+          {/* CTA Button - XXL */}
+          <div 
+            className={`mb-10 animate-on-scroll ${isVisible ? 'visible' : ''}`}
+            style={{ transitionDelay: '0.3s' }}
+          >
             <Button
+              asChild
               size="lg"
-              className="relative bg-secondary hover:bg-secondary/90 text-secondary-foreground text-2xl font-black gap-4 px-14 py-10 rounded-2xl shadow-2xl shadow-secondary/40 hover:shadow-secondary/60 hover:scale-105 transition-all duration-300 group overflow-hidden"
+              className="relative overflow-hidden bg-primary hover:bg-primary/90 text-primary-foreground font-black text-xl md:text-2xl px-12 md:px-16 py-8 md:py-10 rounded-full animate-glow-pulse transition-transform duration-300 hover:scale-105 group"
             >
-              {/* Shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              
-              <Phone className="w-8 h-8 relative z-10" />
-              <span className="relative z-10">06 23 66 68 39</span>
+              <a href="tel:0623666839" className="flex items-center gap-4">
+                <div className="relative">
+                  <Phone className="w-7 h-7" />
+                  {/* Pulse rings */}
+                  <div className="absolute inset-0 animate-pulse-ring">
+                    <Phone className="w-7 h-7 text-primary-foreground/50" />
+                  </div>
+                </div>
+                <span>06 23 66 68 39</span>
+                
+                {/* Shine effect */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              </a>
             </Button>
-          </a>
+          </div>
 
           {/* Trust indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-white/70">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-secondary" />
+          <div 
+            className={`flex flex-wrap justify-center gap-6 md:gap-10 mb-10 animate-on-scroll ${isVisible ? 'visible' : ''}`}
+            style={{ transitionDelay: '0.4s' }}
+          >
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Clock className="w-5 h-5 text-primary" />
               <span>Réponse en -2h</span>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-secondary" />
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <FileCheck className="w-5 h-5 text-primary" />
               <span>Devis gratuit</span>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-secondary" />
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Sparkles className="w-5 h-5 text-primary" />
               <span>Sans engagement</span>
             </div>
           </div>
 
           {/* Availability */}
-          <div className="flex items-center justify-center gap-2 mt-8 text-white/60">
-            <Clock className="w-5 h-5" />
-            <span>Équipe disponible du lundi au samedi, 8h-19h</span>
+          <div 
+            className={`inline-flex items-center gap-3 px-6 py-3 rounded-full glass animate-on-scroll ${isVisible ? 'visible' : ''}`}
+            style={{ transitionDelay: '0.5s' }}
+          >
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-foreground font-medium">
+              Équipe disponible du Lundi au Samedi, 8h-19h
+            </span>
+          </div>
+
+          {/* Savings visualization */}
+          <div 
+            className={`mt-12 p-6 rounded-3xl glass max-w-md mx-auto animate-on-scroll ${isVisible ? 'visible' : ''}`}
+            style={{ transitionDelay: '0.6s' }}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-muted-foreground">Économies moyennes</span>
+              <TrendingDown className="w-5 h-5 text-green-500" />
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-black text-green-500">-2 400€</span>
+              <span className="text-muted-foreground">/an</span>
+            </div>
+            <div className="mt-3 h-2 rounded-full bg-secondary overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-primary to-green-500 rounded-full transition-all duration-1000"
+                style={{ width: isVisible ? '70%' : '0%' }}
+              />
+            </div>
           </div>
         </div>
       </div>
